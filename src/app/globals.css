@@ -1,26 +1,42 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  /* Light Theme */
+  --color-light-bg: #f7f9fc; /* Page background */
+  --color-light-fg: #212529; /* Primary text */
+  --color-light-fg-muted: #333; /* Secondary text */
+  --color-light-surface: #eff1f6; /* Card / section background */
+  --color-light-surface-alt: #ffffff; /* Elevated / alt surface */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* Dark Theme */
+  --color-dark-bg: #1a1d21; /* Page background */
+  --color-dark-fg: #e3e8f3; /* Primary text */
+  --color-dark-fg-muted: #e3e8f3b3; /* Secondary text */
+  --color-dark-surface: #212529; /* Card / section background */
+  --color-dark-surface-alt: #272c31; /* Elevated / alt surface */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Brand */
+  --color-brand-primary: #3b82f6;
+
+  /* Warning */
+  --color-warning: #f03e3e;
+
+  /* Typography */
+  --color-font-sans: var(--font-geist-sans);
+  --color-font-mono: var(--font-geist-mono);
+
+  /* Breakpoints */
+  --breakpoint-xxs: 380px; /* extra extra small devices (phones) */
+  --breakpoint-xs: 480px; /* extra small devices (phones) */
+  --breakpoint-sm: 640px; /* small devices (phones) */
+  --breakpoint-md: 768px; /* tablets */
+  --breakpoint-lg: 920px; /* tablets-laptops */
+  --breakpoint-lxg: 1024px; /* laptops */
+  --breakpoint-2xl: 1280px; /* desktops */
+  --breakpoint-3xl: 1536px; /* large screens */
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Mona Sans", sans-serif;
 }
