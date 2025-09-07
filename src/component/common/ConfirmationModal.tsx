@@ -5,44 +5,26 @@ import PrimaryButton from "@/component/common/PrimarySquareButton";
 import SecondaryButton from "@/component/common/SecondarySquareButton";
 import { useState, useRef, useEffect } from "react";
 import { VscLoading } from "react-icons/vsc";
-
-type Props = {
-  heading: string;
-  children: React.ReactNode;
-  cancelText?: string;
-  confirmText?: string;
-  danger?: boolean;
-  handleCancel: () => void;
-  handelConfirm: () => void;
-  className?: string;
-};
-
-type ModalProps = {
-  heading: string;
-  children: React.ReactNode;
-  cancelText: string;
-  confirmText: string;
-  danger: boolean;
-  handleCancel: () => void;
-  handelConfirm: () => void;
-  className: string;
-};
+import type {
+  ConfirmationModalProps,
+  ConfirmationModalSubModalProps,
+} from "@/types";
 
 function ConfirmationModal({
   heading,
   children,
   handleCancel,
-  handelConfirm,
+  handleConfirm,
   danger = false,
   cancelText = "Cancel",
   confirmText = "Confirm",
   className = "",
-}: Props) {
+}: ConfirmationModalProps) {
   return (
-    <OverlayPortal>
+    <OverlayPortal containerId="Confirmation_Box_Overlay_Portal">
       <Modal
         heading={heading}
-        handelConfirm={handelConfirm}
+        handleConfirm={handleConfirm}
         handleCancel={handleCancel}
         danger={danger}
         cancelText={cancelText}
@@ -62,12 +44,12 @@ function Modal({
   heading,
   children,
   handleCancel,
-  handelConfirm,
+  handleConfirm,
   danger,
   cancelText,
   confirmText,
   className,
-}: ModalProps) {
+}: ConfirmationModalSubModalProps) {
   const [clicked, setClicked] = useState<boolean>(false);
   const divRef = useRef<HTMLDivElement>(null);
 
@@ -80,7 +62,7 @@ function Modal({
   function handleConfirmClick() {
     if (!clicked) {
       setClicked(true);
-      handelConfirm();
+      handleConfirm();
     }
   }
 

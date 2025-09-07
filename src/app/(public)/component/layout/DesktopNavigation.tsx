@@ -1,12 +1,9 @@
 import LoggedinNavLinks from "@/app/(public)/component/optimized/LoggedinNavLinks";
 import LoggedoutNavLinks from "@/app/(public)/component/optimized/LoggedoutNavLinks";
 
-interface DesktopNavigationProps {
-  loggedin: boolean;
-  pathname: string;
-}
+import type { NavigationProps } from "@/types";
 
-function DesktopNavigation({ loggedin, pathname }: DesktopNavigationProps) {
+function DesktopNavigation({ loggedin, pathname }: NavigationProps) {
   return (
     <nav className="lg:flex items-center justify-center  hidden">
       <div>

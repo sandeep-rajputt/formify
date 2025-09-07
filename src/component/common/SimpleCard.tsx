@@ -1,15 +1,12 @@
 "use client";
 import { memo } from "react";
+import type { SimpleCardProps } from "@/types";
 
 function SimpleCard({
   children,
   className = "",
   handleClick = () => {},
-}: {
-  children: React.ReactNode;
-  className?: string;
-  handleClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-}) {
+}: SimpleCardProps) {
   return (
     <div
       onClick={(e) => handleClick(e)}

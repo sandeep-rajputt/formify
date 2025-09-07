@@ -3,7 +3,9 @@ import MenuLink from "@/component/headlessui/MenuLink";
 
 const links: string[] = ["Home", "About", "Contact", "Faqs"];
 
-function LoggedoutMobileNavLinks({ pathname }: { pathname: string }) {
+import type { PathnameProps } from "@/types";
+
+function LoggedoutMobileNavLinks({ pathname }: PathnameProps) {
   return (
     <>
       {links.map((item) => {

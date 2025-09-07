@@ -3,14 +3,14 @@
 import { MenuItem } from "@headlessui/react";
 import { memo } from "react";
 
-type Props = {
-  children: React.ReactNode;
-  title: string;
-  handleClick: () => void;
-  className?: string;
-};
+import type { MenuBtnProps } from "@/types";
 
-function MenuBtn({ children, title, handleClick, className = "" }: Props) {
+function MenuBtn({
+  children,
+  title,
+  handleClick,
+  className = "",
+}: MenuBtnProps) {
   return (
     <MenuItem>
       <button

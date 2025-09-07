@@ -3,7 +3,9 @@ import Link from "next/link";
 
 const links: string[] = ["Home", "About", "Contact", "Faqs"];
 
-function LoggedoutNavLinks({ pathname }: { pathname: string }) {
+import type { PathnameProps } from "@/types";
+
+function LoggedoutNavLinks({ pathname }: PathnameProps) {
   return (
     <ul className="flex items-center justify-center gap-2">
       {links.map((item) => {

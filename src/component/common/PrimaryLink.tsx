@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import type { PrimaryLinkProps } from "@/types";
 
 function PrimaryLink({
   children,
@@ -7,13 +8,7 @@ function PrimaryLink({
   link,
   external = false,
   title,
-}: {
-  children: React.ReactNode;
-  className?: string;
-  link: string;
-  external?: boolean;
-  title?: string;
-}) {
+}: PrimaryLinkProps) {
   return (
     <Link
       href={external ? link : link.startsWith("/") ? link : `/${link}`}

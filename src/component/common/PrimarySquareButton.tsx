@@ -1,13 +1,6 @@
 "use client";
 import { memo } from "react";
-
-type Props = {
-  className?: string;
-  children: React.ReactNode;
-  title?: string;
-  disabled?: boolean;
-  handleClick?: () => void;
-};
+import type { PrimarySquareButtonProps } from "@/types";
 
 function PrimarySquareButton({
   className = "",
@@ -15,7 +8,7 @@ function PrimarySquareButton({
   title = "",
   disabled = false,
   handleClick = () => {},
-}: Props) {
+}: PrimarySquareButtonProps) {
   return (
     <button
       title={title || (children as string)}

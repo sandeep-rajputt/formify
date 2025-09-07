@@ -1,4 +1,6 @@
-const SVGComponent = ({ size = 40 }: { size?: number }) => (
+import type { LogoProps } from "@/types";
+
+const SVGComponent = ({ size = 40 }: LogoProps) => (
   <svg
     width={size}
     height={size}

@@ -3,13 +3,7 @@ import { MenuItem } from "@headlessui/react";
 import Link from "next/link";
 import { memo } from "react";
 
-type Props = {
-  children: React.ReactNode;
-  className?: string;
-  title?: string;
-  link: string;
-  external?: boolean;
-};
+import type { MenuLinkProps } from "@/types";
 
 function MenuLink({
   children,
@@ -17,7 +11,7 @@ function MenuLink({
   link,
   title = "",
   external = false,
-}: Props) {
+}: MenuLinkProps) {
   return (
     <MenuItem>
       <Link

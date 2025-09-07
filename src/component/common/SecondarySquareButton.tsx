@@ -1,13 +1,6 @@
 "use client";
 import { memo } from "react";
-
-type Props = {
-  className?: string;
-  children: React.ReactNode;
-  title?: string;
-  disabled?: boolean;
-  handleClick?: () => void;
-};
+import type { SecondarySquareButtonProps } from "@/types";
 
 function SecondarySquareButton({
   className = "",
@@ -15,7 +8,7 @@ function SecondarySquareButton({
   title = "",
   disabled = false,
   handleClick = () => {},
-}: Props) {
+}: SecondarySquareButtonProps) {
   return (
     <button
       disabled={disabled}

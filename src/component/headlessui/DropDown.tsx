@@ -2,32 +2,7 @@
 import { Menu, MenuItems } from "@headlessui/react";
 import { memo } from "react";
 
-type AnchorProps =
-  | "bottom end"
-  | "bottom start"
-  | "top end"
-  | "top start"
-  | "top"
-  | "bottom"
-  | "left"
-  | "right"
-  | "top start"
-  | "top end"
-  | "bottom start"
-  | "bottom end"
-  | "left start"
-  | "left end"
-  | "right start"
-  | "right end"
-  | undefined;
-
-type Props = {
-  children: React.ReactNode;
-  width?: string;
-  anchor?: AnchorProps;
-  mainButton: React.ReactNode;
-  className?: string;
-};
+import type { DropDownProps } from "@/types";
 
 function DropDown({
   children,
@@ -35,7 +10,7 @@ function DropDown({
   anchor = "bottom end",
   mainButton,
   className = "",
-}: Props) {
+}: DropDownProps) {
   return (
     <div>
       <Menu>

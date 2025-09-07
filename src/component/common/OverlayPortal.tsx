@@ -4,13 +4,12 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
+import type { OverlayPortalProps } from "@/types";
+
 export default function OverlayPortal({
   children,
   containerId = "__next_overlay_portal__",
-}: {
-  children: React.ReactNode;
-  containerId?: string;
-}) {
+}: OverlayPortalProps) {
   const [mounted, setMounted] = useState(false);
   const containerRef = useRef<HTMLElement | null>(null);
 

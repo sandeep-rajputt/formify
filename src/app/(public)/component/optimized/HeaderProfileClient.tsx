@@ -8,16 +8,7 @@ import { MenuButton } from "@headlessui/react";
 import Image from "next/image";
 import ConfirmationModal from "@/component/common/ConfirmationModal";
 
-interface UserData {
-  name: string;
-  email: string;
-  avatar: string;
-}
-
-interface HeaderProfileClientProps {
-  userData: UserData;
-  profileMenuItems: React.ReactNode;
-}
+import type { HeaderProfileClientProps, UserData } from "@/types";
 
 function HeaderProfileClient({
   userData,
@@ -50,7 +41,7 @@ function HeaderProfileClient({
           heading="Logout Confirmation"
           handleCancel={handleCancel}
           danger={true}
-          handelConfirm={handleConfirm}
+          handleConfirm={handleConfirm}
         >
           <p className="text-sm text-bt-secondary dark:text-wt-secondary">
             Are you sure you want to log out?

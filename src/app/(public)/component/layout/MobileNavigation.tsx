@@ -7,12 +7,9 @@ import LoggedoutMobileNavLinks from "@/app/(public)/component/optimized/Loggedou
 import Separator from "@/component/headlessui/Separator";
 import MenuLink from "@/component/headlessui/MenuLink";
 
-interface MobileNavigationProps {
-  loggedin: boolean;
-  pathname: string;
-}
+import type { NavigationProps } from "@/types";
 
-function MobileNavigation({ loggedin, pathname }: MobileNavigationProps) {
+function MobileNavigation({ loggedin, pathname }: NavigationProps) {
   return (
     <div className="lg:hidden block">
       <DropDown
