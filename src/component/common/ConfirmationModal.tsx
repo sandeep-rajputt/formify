@@ -82,13 +82,13 @@ function Modal({
       ref={divRef}
       onKeyDown={(e) => handleKeys(e.key)}
       onClick={handleCancelClick}
-      className={`flex items-center justify-center h-full dark:bg-light-fg/50 backdrop-blur-md `}
+      className={`flex items-center justify-center h-full dark:bg-light-fg/50 bg-dark-fg/50 backdrop-blur-lg `}
     >
       <SimpleCard
         handleClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
           e.stopPropagation()
         }
-        className={`max-w-md w-full mx-5 ${className}`}
+        className={`max-w-md w-full mx-5 !bg-dark-fg !backdrop-blur-none ${className}`}
       >
         <h4 className="font-semibold text-xl mb-2">{heading}</h4>
         {children}

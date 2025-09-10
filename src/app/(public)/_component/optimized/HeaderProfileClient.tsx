@@ -7,6 +7,7 @@ import MenuBtn from "@/component/headlessui/MenuBtn";
 import { MenuButton } from "@headlessui/react";
 import Image from "next/image";
 import ConfirmationModal from "@/component/common/ConfirmationModal";
+import { signOut } from "next-auth/react";
 
 import type { HeaderProfileClientProps, UserData } from "@/types";
 
@@ -17,7 +18,7 @@ function HeaderProfileClient({
   const [confirmLogoutModal, setConfirmLogoutModal] = useState<boolean>(false);
 
   function handleConfirm() {
-    console.log("logout");
+    signOut();
   }
 
   function handleCancel() {
@@ -59,7 +60,7 @@ function UserProfileButton({ userData }: { userData: UserData }) {
         <Image
           width={32}
           height={32}
-          src={userData.avatar}
+          src={userData.image || "/user.svg"}
           alt={`${userData.name} Image`}
           draggable="false"
           className="w-full h-full rounded-full object-cover scale-110"

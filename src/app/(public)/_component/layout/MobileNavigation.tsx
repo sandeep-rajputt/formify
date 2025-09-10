@@ -2,8 +2,8 @@
 import { MenuButton } from "@headlessui/react";
 import { IoMdMenu } from "react-icons/io";
 import DropDown from "@/component/headlessui/DropDown";
-import LoggedinMobileNavLinks from "@/app/(public)/component/optimized/LoggedinMobileNavLinks";
-import LoggedoutMobileNavLinks from "@/app/(public)/component/optimized/LoggedoutMobileNavLinks";
+import LoggedinMobileNavLinks from "@/app/(public)/_component/optimized/LoggedinMobileNavLinks";
+import LoggedoutMobileNavLinks from "@/app/(public)/_component/optimized/LoggedoutMobileNavLinks";
 import Separator from "@/component/headlessui/Separator";
 import MenuLink from "@/component/headlessui/MenuLink";
 
@@ -29,8 +29,9 @@ function MobileNavigation({ loggedin, pathname }: NavigationProps) {
             <div className="xs:hidden block">
               <Separator />
               <MenuLink
-                link="/login"
-                className={`bg-brand-primary !text-white  data-focus:bg-brand-primary font-semibold `}
+                link="login"
+                title="Login to account"
+                className={`!bg-brand-primary !hover:bg-brand-primary !text-white  data-focus:bg-brand-primary font-semibold `}
               >
                 <span className="flex items-center justify-center w-full">
                   Login

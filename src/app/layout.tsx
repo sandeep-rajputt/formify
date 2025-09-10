@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Providers from "@/lib/providers";
+import NextTopLoader from "nextjs-toploader";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,6 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://formify.sandeeprajput.in"),
   title: "Formify – AI-Powered Form Builder",
   description:
     "Formify is an AI-powered drag-and-drop form builder that helps you create customizable, smart, and professional forms in minutes. Build, manage, and analyze forms effortlessly with modern features like AI generation, analytics, and integrations.",
@@ -45,15 +48,25 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  model,
 }: Readonly<{
   children: React.ReactNode;
+  model: React.ReactNode;
 }>) {
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased dark:bg-dark-bg bg-light-bg text-light-fg dark:text-dark-fg `}
       >
-        {children}
+        <NextTopLoader
+          zIndex={99999999999999}
+          color="#3b82f6"
+          showSpinner={false}
+        />
+        <Providers>
+          {children}
+          {model}
+        </Providers>
       </body>
     </html>
   );

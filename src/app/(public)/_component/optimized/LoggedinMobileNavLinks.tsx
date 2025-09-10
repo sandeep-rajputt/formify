@@ -6,6 +6,7 @@ const links: string[] = ["Home", "About", "Dashboard", "Contact"];
 import type { PathnameProps } from "@/types";
 
 function LoggedinMobileNavLinks({ pathname }: PathnameProps) {
+  console.log(pathname);
   return (
     <>
       {links.map((item) => {

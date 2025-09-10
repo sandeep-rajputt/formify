@@ -4,37 +4,26 @@ import { LuLayoutDashboard } from "react-icons/lu";
 import Separator from "@/component/headlessui/Separator";
 import MenuLink from "@/component/headlessui/MenuLink";
 import EllipsisText from "@/component/common/EllipsisText";
-import HeaderProfileClient from "@/app/(public)/component/optimized/HeaderProfileClient";
+import HeaderProfileClient from "@/app/(public)/_component/optimized/HeaderProfileClient";
+import type { UserData } from "@/types";
 
-// This would be where you fetch user data from database
-async function getUserData() {
-  // TODO: Replace with actual database call
-  return {
-    name: "Sandeep Rajput",
-    email: "rajputsandeep@gmail.com",
-    avatar: "/me.png",
-  };
-}
-
-async function HeaderProfile() {
-  const userData = await getUserData();
-
+async function HeaderProfile({ user }: { user: UserData }) {
   const profileMenuItems = (
     <>
       <div className="px-3 py-0.5">
         <h3 className="font-semibold ">
-          <EllipsisText>{userData.name}</EllipsisText>
+          <EllipsisText>{user.name}</EllipsisText>
         </h3>
         <p className="text-sm/6 -mt-1 text-light-fg-muted dark:text-dark-fg-muted">
-          <EllipsisText>{userData.email}</EllipsisText>
+          <EllipsisText>{user.email}</EllipsisText>
         </p>
       </div>
       <Separator />
-      <MenuLink title="Dashboard" link="profile">
+      <MenuLink title="Dashboard" link="dashboard">
         <LuLayoutDashboard className="text-light-fg-muted dark:text-dark-fg-muted" />
         <EllipsisText>Dashboard</EllipsisText>
       </MenuLink>
-      <MenuLink title="My Forms" link="leaderboard">
+      <MenuLink title="My Forms" link="dashboard/forms">
         <MdOutlineLibraryBooks className="text-light-fg-mut dark:text-dark-fg-muted" />
         <EllipsisText>My Forms</EllipsisText>
       </MenuLink>
@@ -47,10 +36,7 @@ async function HeaderProfile() {
   );
 
   return (
-    <HeaderProfileClient
-      userData={userData}
-      profileMenuItems={profileMenuItems}
-    />
+    <HeaderProfileClient userData={user} profileMenuItems={profileMenuItems} />
   );
 }
 

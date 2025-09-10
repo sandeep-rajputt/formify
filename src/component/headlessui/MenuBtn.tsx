@@ -18,7 +18,7 @@ function MenuBtn({
         title={title}
         aria-label={title}
         onClick={handleClick}
-        className={`group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 dark:data-focus:bg-wt-primary/10 data-focus:bg-bt-primary/5 cursor-pointer ${className}`}
+        className={`group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 dark:data-focus:bg-dark-fg/10 data-focus:bg-light-fg/5 cursor-pointer ${className}`}
       >
         {children}
       </button>

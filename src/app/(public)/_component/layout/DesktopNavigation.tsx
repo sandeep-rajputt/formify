@@ -1,5 +1,5 @@
-import LoggedinNavLinks from "@/app/(public)/component/optimized/LoggedinNavLinks";
-import LoggedoutNavLinks from "@/app/(public)/component/optimized/LoggedoutNavLinks";
+import LoggedinNavLinks from "@/app/(public)/_component/optimized/LoggedinNavLinks";
+import LoggedoutNavLinks from "@/app/(public)/_component/optimized/LoggedoutNavLinks";
 
 import type { NavigationProps } from "@/types";
 

@@ -166,11 +166,16 @@ export type NavigationProps = {
 // PUBLIC APP OPTIMIZED COMPONENTS - src/app/(public)/component/optimized/
 // =============================================================================
 
+// User roles type
+export type UserRole = "user" | "admin" | "owner";
+
 // User data interface for HeaderProfile components
 export interface UserData {
+  id: string;
   name: string;
   email: string;
-  avatar: string;
+  image: string;
+  role: UserRole;
 }
 
 // HeaderProfileClient.tsx
