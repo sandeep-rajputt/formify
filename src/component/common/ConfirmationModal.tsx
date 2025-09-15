@@ -88,7 +88,7 @@ function Modal({
         handleClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
           e.stopPropagation()
         }
-        className={`max-w-md w-full mx-5 !bg-dark-fg !backdrop-blur-none ${className}`}
+        className={`max-w-md w-full mx-5 !bg-dark-fg dark:!bg-light-fg !backdrop-blur-none ${className}`}
       >
         <h4 className="font-semibold text-xl mb-2">{heading}</h4>
         {children}

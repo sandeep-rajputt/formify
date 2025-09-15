@@ -1,6 +1,6 @@
 import type { LogoProps } from "@/types";
 
-const SVGComponent = ({ size = 40 }: LogoProps) => (
+const Logo = ({ size = 40 }: LogoProps) => (
   <svg
     width={size}
     height={size}
@@ -13,4 +13,4 @@ const SVGComponent = ({ size = 40 }: LogoProps) => (
     <rect x={14} y={26} width={12} height={4} rx={2} fill="#ffffff" />
   </svg>
 );
-export default SVGComponent;
+export default Logo;

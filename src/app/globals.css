@@ -7,7 +7,7 @@
   --color-light-fg: #212529; /* Primary text */
   --color-light-fg-muted: #333; /* Secondary text */
   --color-light-surface: #eff1f6; /* Card / section background */
-  --color-light-surface-alt: #ffffff; /* Elevated / alt surface */
+  --color-light-surface-alt: #e6e8ec; /* Elevated / alt surface */
 
   /* Dark Theme */
   --color-dark-bg: #1a1d21; /* Page background */
@@ -32,7 +32,7 @@
   --breakpoint-sm: 640px; /* small devices (phones) */
   --breakpoint-md: 768px; /* tablets */
   --breakpoint-lg: 920px; /* tablets-laptops */
-  --breakpoint-lxg: 1024px; /* laptops */
+  --breakpoint-xl: 1024px; /* laptops */
   --breakpoint-2xl: 1280px; /* desktops */
   --breakpoint-3xl: 1536px; /* large screens */
 }
@@ -43,4 +43,35 @@ body {
 
 body::-webkit-scrollbar {
   width: 0px;
+}
+
+.scrollbar {
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(33, 37, 41, 0.4) transparent;
+}
+
+/* Hide scrollbars for WebKit if not overflowing */
+.scrollbar:not(:hover)::-webkit-scrollbar:horizontal,
+.scrollbar:not(:hover)::-webkit-scrollbar:vertical {
+  background: transparent;
+}
+
+/* Webkit custom scrollbar when needed */
+.scrollbar::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(33, 37, 41, 0.4);
+  border-radius: 20px;
+}
+
+.dark .scrollbar {
+  scrollbar-color: rgba(227, 232, 243, 0.315) transparent;
 }

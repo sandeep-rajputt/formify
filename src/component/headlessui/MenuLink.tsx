@@ -15,7 +15,7 @@ function MenuLink({
   return (
     <MenuItem>
       <Link
-        href={external ? link : `/${link}`}
+        href={external ? link : link.startsWith("/") ? link : `/${link}`}
         title={title || (children as string)}
         aria-label={title || (children as string)}
         target={external ? "_blank" : "_self"}

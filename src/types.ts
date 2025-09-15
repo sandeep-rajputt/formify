@@ -172,6 +172,7 @@ export type UserRole = "user" | "admin" | "owner";
 // User data interface for HeaderProfile components
 export interface UserData {
   id: string;
+  dashboard: string;
   name: string;
   email: string;
   image: string;

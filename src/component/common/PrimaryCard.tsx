@@ -1,3 +1,5 @@
+"use client";
+
 import { SimpleCardProps } from "@/types";
 
 function PrimaryCard({

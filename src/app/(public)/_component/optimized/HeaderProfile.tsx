@@ -1,6 +1,6 @@
-import { CiSettings } from "react-icons/ci";
-import { MdOutlineLibraryBooks } from "react-icons/md";
-import { LuLayoutDashboard } from "react-icons/lu";
+import OverviewSVG from "@/component/svg/OverviewSVG";
+import FormsSVG from "@/component/svg/FormsSVG";
+import SettingSVG from "@/component/svg/SettingSVG";
 import Separator from "@/component/headlessui/Separator";
 import MenuLink from "@/component/headlessui/MenuLink";
 import EllipsisText from "@/component/common/EllipsisText";
@@ -19,16 +19,16 @@ async function HeaderProfile({ user }: { user: UserData }) {
         </p>
       </div>
       <Separator />
-      <MenuLink title="Dashboard" link="dashboard">
-        <LuLayoutDashboard className="text-light-fg-muted dark:text-dark-fg-muted" />
+      <MenuLink title="Dashboard" link={`/dashboard/${user.dashboard}`}>
+        <OverviewSVG size={14} />
         <EllipsisText>Dashboard</EllipsisText>
       </MenuLink>
-      <MenuLink title="My Forms" link="dashboard/forms">
-        <MdOutlineLibraryBooks className="text-light-fg-mut dark:text-dark-fg-muted" />
+      <MenuLink title="My Forms" link={`/dashboard/${user.dashboard}/forms`}>
+        <FormsSVG size={14} />
         <EllipsisText>My Forms</EllipsisText>
       </MenuLink>
-      <MenuLink title="Settings" link="settings">
-        <CiSettings className="text-light-fg-mut dark:text-dark-fg-muted" />
+      <MenuLink title="Setting" link={`/dashboard/${user.dashboard}/setting`}>
+        <SettingSVG size={14} />
         <EllipsisText>Settings</EllipsisText>
       </MenuLink>
       <Separator />

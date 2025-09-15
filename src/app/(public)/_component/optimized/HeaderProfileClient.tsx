@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import { RxExit } from "react-icons/rx";
 import DropDown from "@/component/headlessui/DropDown";
 import EllipsisText from "@/component/common/EllipsisText";
 import MenuBtn from "@/component/headlessui/MenuBtn";
@@ -8,6 +7,7 @@ import { MenuButton } from "@headlessui/react";
 import Image from "next/image";
 import ConfirmationModal from "@/component/common/ConfirmationModal";
 import { signOut } from "next-auth/react";
+import LogoutArrowIcon from "@/component/svg/LogoutArrowIcon";
 
 import type { HeaderProfileClientProps, UserData } from "@/types";
 
@@ -33,7 +33,7 @@ function HeaderProfileClient({
           handleClick={() => setConfirmLogoutModal(true)}
           title="Log out"
         >
-          <RxExit className="text-bt-secondary dark:text-wt-secondary" />
+          <LogoutArrowIcon size={14} />
           <EllipsisText>Log out</EllipsisText>
         </MenuBtn>
       </DropDown>

@@ -1,0 +1,61 @@
+import React from "react";
+
+interface FormsSVGProps {
+  className?: string;
+  size?: number;
+  width?: number;
+  height?: number;
+}
+
+const FormsSVG: React.FC<FormsSVGProps> = ({
+  className,
+  size,
+  width,
+  height,
+}) => {
+  const iconSize = size ? `${size}px` : undefined;
+  const iconWidth = width ? `${width}px` : iconSize || "24px";
+  const iconHeight = height ? `${height}px` : iconSize || "24px";
+
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width={iconWidth}
+      height={iconHeight}
+      className={`stroke-[--color-foreground] ${className}`}
+      fill="none"
+    >
+      <path
+        d="M21.66 10.44L20.68 14.62C19.84 18.23 18.18 19.69 15.06 19.39C14.56 19.35 14.02 19.26 13.44 19.12L11.76 18.72C7.59 17.73 6.3 15.67 7.28 11.49L8.26 7.30001C8.46 6.45001 8.7 5.71001 9 5.10001C10.17 2.68001 12.16 2.03001 15.5 2.82001L17.17 3.21001C21.36 4.19001 22.64 6.26001 21.66 10.44Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M15.06 19.39C14.44 19.81 13.66 20.16 12.71 20.47L11.13 20.99C7.16 22.27 5.07 21.2 3.78 17.23L2.5 13.28C1.22 9.30998 2.28 7.20998 6.25 5.92998L7.83 5.40998C8.24 5.27998 8.63 5.16998 9 5.09998C8.7 5.70998 8.46 6.44998 8.26 7.29998L7.28 11.49C6.3 15.67 7.59 17.73 11.76 18.72L13.44 19.12C14.02 19.26 14.56 19.35 15.06 19.39Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M12.64 8.53003L17.49 9.76003"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M11.66 12.4L14.56 13.14"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+};
+
+export default FormsSVG;
