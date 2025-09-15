@@ -15,12 +15,12 @@ function LoginPageContent() {
   const error = searchParams.get("error") || null;
   const handleGoogleLogin = () => {
     setGoogleButtonLoading(true);
-    signIn("google", { callbackUrl: "/" });
+    signIn("google", { callbackUrl: "/dashboard" });
   };
 
   const handleGithubLogin = () => {
     setGithubButtonLoading(true);
-    signIn("github", { callbackUrl: "/" });
+    signIn("github", { callbackUrl: "/dashboard" });
   };
 
   return (

@@ -93,6 +93,7 @@ export const authOptions = {
     },
   },
   pages: {
+    newUser: "/dashboard",
     signIn: "/login",
     signUp: "/register",
   },
