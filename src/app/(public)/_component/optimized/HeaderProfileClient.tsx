@@ -8,7 +8,7 @@ import Image from "next/image";
 import ConfirmationModal from "@/component/common/ConfirmationModal";
 import { signOut } from "next-auth/react";
 import LogoutArrowIcon from "@/component/svg/LogoutArrowIcon";
-
+import NewPortal from "@/component/common/NewPortal";
 import type { HeaderProfileClientProps, UserData } from "@/types";
 
 function HeaderProfileClient({
@@ -38,16 +38,18 @@ function HeaderProfileClient({
         </MenuBtn>
       </DropDown>
       {confirmLogoutModal && (
-        <ConfirmationModal
-          heading="Logout Confirmation"
-          handleCancel={handleCancel}
-          danger={true}
-          handleConfirm={handleConfirm}
-        >
-          <p className="text-sm text-bt-secondary dark:text-wt-secondary">
-            Are you sure you want to log out?
-          </p>
-        </ConfirmationModal>
+        <NewPortal>
+          <ConfirmationModal
+            heading="Logout Confirmation"
+            handleCancel={handleCancel}
+            danger={true}
+            handleConfirm={handleConfirm}
+          >
+            <p className="text-sm text-bt-secondary dark:text-wt-secondary">
+              Are you sure you want to log out?
+            </p>
+          </ConfirmationModal>
+        </NewPortal>
       )}
     </div>
   );

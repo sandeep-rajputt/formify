@@ -1,4 +1,4 @@
-import NextAuth from "next-auth";
+import NextAuth from "next-auth/next"; // ✅ App Router compatible
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import connectDB from "@/lib/db";
@@ -26,28 +26,15 @@ export const authOptions = {
       try {
         await connectDB();
         const firstName = user.name?.split(" ")[0].toLowerCase() || "user";
-        const dashboardId = `${firstName}-${generateUniqueId()}`;
+        let finalDashboardId = `${firstName}-${generateUniqueId()}`;
 
-        // check dashboard id not for other user
-        let isUniqueDashboardId = false;
-        let finalDashboardId = dashboardId;
-
-        while (!isUniqueDashboardId) {
-          const existingUserWithDashboardId = await User.findOne({
-            dashboard: finalDashboardId,
-          });
-          if (!existingUserWithDashboardId) {
-            isUniqueDashboardId = true;
-          } else {
-            finalDashboardId = `${firstName}-${generateUniqueId()}`;
-          }
+        // ensure dashboard id is unique
+        while (await User.findOne({ dashboard: finalDashboardId })) {
+          finalDashboardId = `${firstName}-${generateUniqueId()}`;
         }
 
-        // 🔎 Check if user already exists
         const existingUser = await User.findOne({ email: user.email });
-
         if (!existingUser) {
-          // 🆕 Create new user with required defaults
           await User.create({
             dashboard: finalDashboardId,
             name: user.name || "Unknown",

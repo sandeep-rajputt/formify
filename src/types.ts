@@ -113,6 +113,7 @@ export type DropDownProps = {
   anchor?: AnchorProps;
   mainButton: React.ReactNode;
   className?: string;
+  onOpenChange?: (open: boolean) => void;
 };
 
 // MainButton.tsx

@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import dashboardSidebarReducer from "@/Store/slice/dashboardSidebarSlice";
+import formReducer from "@/Store/slice/formSlice";
 
 const store = configureStore({
   reducer: {
     dashboardSidebar: dashboardSidebarReducer,
+    form: formReducer,
   },
 });
 

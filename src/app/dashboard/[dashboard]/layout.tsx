@@ -5,6 +5,7 @@ import DashboardHeader from "@/app/dashboard/[dashboard]/_components/layout/Head
 import SidebarWrapper from "@/app/dashboard/[dashboard]/_components/layout/sidebar/SidebarWrapper";
 import DashboardSidebar from "@/app/dashboard/[dashboard]/_components/layout/sidebar/Sidebar";
 import DashboardContentWrapper from "@/app/dashboard/[dashboard]/_components/layout/DashboardContentWrapper";
+import Container from "@/component/layout/Container";
 
 async function DashboardLayout({
   children,
@@ -23,13 +24,15 @@ async function DashboardLayout({
   }
 
   return (
-    <div className="h-dvh overflow-hidden">
+    <div className="h-dvh overflow-hidden" id="main-container">
       <DashboardHeader />
       <div className="relative h-[calc(100dvh-80px)]">
         <SidebarWrapper>
           <DashboardSidebar />
         </SidebarWrapper>
-        <DashboardContentWrapper>{children}</DashboardContentWrapper>
+        <DashboardContentWrapper>
+          <Container>{children}</Container>
+        </DashboardContentWrapper>
       </div>
     </div>
   );

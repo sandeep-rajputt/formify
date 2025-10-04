@@ -1,14 +1,10 @@
 "use client";
-import OverlayPortal from "@/component/common/OverlayPortal";
 import SimpleCard from "@/component/common/SimpleCard";
 import PrimaryButton from "@/component/common/PrimarySquareButton";
 import SecondaryButton from "@/component/common/SecondarySquareButton";
 import { useState, useRef, useEffect } from "react";
 import { VscLoading } from "react-icons/vsc";
-import type {
-  ConfirmationModalProps,
-  ConfirmationModalSubModalProps,
-} from "@/types";
+import type { ConfirmationModalProps } from "@/types";
 
 function ConfirmationModal({
   heading,
@@ -20,38 +16,9 @@ function ConfirmationModal({
   confirmText = "Confirm",
   className = "",
 }: ConfirmationModalProps) {
-  return (
-    <OverlayPortal containerId="Confirmation_Box_Overlay_Portal">
-      <Modal
-        heading={heading}
-        handleConfirm={handleConfirm}
-        handleCancel={handleCancel}
-        danger={danger}
-        cancelText={cancelText}
-        confirmText={confirmText}
-        className={className}
-      >
-        {children}
-      </Modal>
-    </OverlayPortal>
-  );
-}
-
-export default ConfirmationModal;
-
-// new component to prevent re render the overlayportal
-function Modal({
-  heading,
-  children,
-  handleCancel,
-  handleConfirm,
-  danger,
-  cancelText,
-  confirmText,
-  className,
-}: ConfirmationModalSubModalProps) {
   const [clicked, setClicked] = useState<boolean>(false);
   const divRef = useRef<HTMLDivElement>(null);
+  const [showCancelBtn, setShowCancelBtn] = useState<boolean>(true);
 
   function handleCancelClick() {
     if (!clicked) {
@@ -61,6 +28,7 @@ function Modal({
 
   function handleConfirmClick() {
     if (!clicked) {
+      setShowCancelBtn(false);
       setClicked(true);
       handleConfirm();
     }
@@ -88,16 +56,20 @@ function Modal({
         handleClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
           e.stopPropagation()
         }
-        className={`max-w-md w-full mx-5 !bg-dark-fg dark:!bg-light-fg !backdrop-blur-none ${className}`}
+        className={`max-w-md w-full mx-5 !bg-dark-fg dark:!bg-light-fg !backdrop-blur-none p-6 ${className}`}
       >
         <h4 className="font-semibold text-xl mb-2">{heading}</h4>
-        {children}
+        <div className="text-light-fg-muted dark:text-dark-fg-muted">
+          {children}
+        </div>
         <div className="flex gap-3 mt-5 ml-auto w-fit">
-          <SecondaryButton handleClick={handleCancelClick}>
-            {cancelText}
-          </SecondaryButton>
+          {showCancelBtn && (
+            <SecondaryButton handleClick={handleCancelClick}>
+              {cancelText}
+            </SecondaryButton>
+          )}
           <PrimaryButton
-            className={`${danger && "!bg-warning"}`}
+            className={`${danger && "!bg-warning"} ${clicked && "py-3"}`}
             title={confirmText}
             handleClick={() => {
               handleConfirmClick();
@@ -110,3 +82,5 @@ function Modal({
     </div>
   );
 }
+
+export default ConfirmationModal;

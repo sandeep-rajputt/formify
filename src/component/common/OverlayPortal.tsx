@@ -4,39 +4,25 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
-import type { OverlayPortalProps } from "@/types";
+interface OverlayPortalProps {
+  children: React.ReactNode;
+}
 
-export default function OverlayPortal({
-  children,
-  containerId = "__next_overlay_portal__",
-}: OverlayPortalProps) {
+export default function OverlayPortal({ children }: OverlayPortalProps) {
   const [mounted, setMounted] = useState(false);
   const containerRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
-    let container = document.getElementById(containerId);
+    const container = document.getElementById("main-container");
 
     if (!container) {
-      container = document.createElement("div");
-      container.setAttribute("id", containerId);
-      container.style.position = "fixed";
-      container.style.top = "0";
-      container.style.left = "0";
-      container.style.width = "100vw";
-      container.style.height = "100vh";
-      container.style.zIndex = "999999999";
-      document.body.appendChild(container);
+      console.warn(`OverlayPortal: #main-container not found in DOM.`);
+      return;
     }
 
     containerRef.current = container;
     setMounted(true);
-
-    return () => {
-      if (container && container.parentNode) {
-        container.parentNode.removeChild(container);
-      }
-    };
-  }, [containerId]);
+  }, []);
 
   if (!mounted || !containerRef.current) return null;
 

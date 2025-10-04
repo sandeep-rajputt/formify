@@ -64,8 +64,10 @@ export default function RootLayout({
           showSpinner={false}
         />
         <Providers>
-          {children}
-          {model}
+          <div id="main-container" className="relative">
+            {children}
+            {model}
+          </div>
         </Providers>
       </body>
     </html>

@@ -75,3 +75,8 @@ body::-webkit-scrollbar {
 .dark .scrollbar {
   scrollbar-color: rgba(227, 232, 243, 0.315) transparent;
 }
+
+#headlessui-portal-root {
+  z-index: 5000000000;
+  position: relative;
+}

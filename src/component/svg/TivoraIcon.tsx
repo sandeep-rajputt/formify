@@ -1,0 +1,67 @@
+import * as React from "react";
+
+interface IconProps {
+  className?: string;
+  size?: number;
+}
+
+const TivoraIcon: React.FC<IconProps> = ({ className = "", size = 24 }) => {
+  const iconSize = `${size}px`;
+
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 30 30"
+      width={iconSize}
+      height={iconSize}
+      className={className}
+      fill="none"
+    >
+      <g clipPath="url(#clip0_690_233)">
+        <path
+          d="M14.0964 29.2589C21.6443 29.2589 27.7631 23.1401 27.7631 15.5922C27.7631 8.04433 21.6443 1.92554 14.0964 1.92554C6.54848 1.92554 0.429688 8.04433 0.429688 15.5922C0.429688 23.1401 6.54848 29.2589 14.0964 29.2589Z"
+          fill="url(#paint0_linear_690_233)"
+          stroke="url(#paint1_linear_690_233)"
+          strokeWidth="0.6"
+        />
+        <path
+          d="M15.453 10.5906H8.1311V14.5589H11.6523V23.5017L15.453 19.5333V10.5906Z"
+          fill="white"
+        />
+        <path
+          d="M21.0311 10.5906H16.5508V14.6423L21.0311 10.5906Z"
+          fill="white"
+        />
+      </g>
+      <defs>
+        <linearGradient
+          id="paint0_linear_690_233"
+          x1="1.59228"
+          y1="21.2619"
+          x2="38.7109"
+          y2="18.6083"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#6645EB" />
+          <stop offset="1" stopColor="#D445EB" />
+        </linearGradient>
+        <linearGradient
+          id="paint1_linear_690_233"
+          x1="1.59228"
+          y1="21.2619"
+          x2="38.7109"
+          y2="18.6083"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#6645EB" />
+          <stop offset="1" stopColor="#D445EB" />
+        </linearGradient>
+        <clipPath id="clip0_690_233">
+          <rect width="30" height="30" fill="white" />
+        </clipPath>
+      </defs>
+    </svg>
+  );
+};
+
+export default TivoraIcon;

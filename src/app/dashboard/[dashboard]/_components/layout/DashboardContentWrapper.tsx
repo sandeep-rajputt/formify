@@ -12,7 +12,7 @@ function DashboardContentWrapper({ children }: { children: React.ReactNode }) {
         isOpen || isLargeScreen ? "2xl:ml-64 ml-0" : "ml-0"
       }`}
     >
-      <div className="overflow-y-scroll p-5 h-full scrollbar">{children}</div>
+      <div className="overflow-y-scroll py-5 h-full scrollbar">{children}</div>
     </div>
   );
 }

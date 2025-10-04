@@ -16,7 +16,7 @@ function HandleSidebar({ children }: { children: React.ReactNode }) {
       }
     };
     handleResize();
-  }, []);
+  }, [dispatch]);
 
   return children;
 }

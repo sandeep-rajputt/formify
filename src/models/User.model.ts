@@ -2,7 +2,7 @@ import mongoose, { Document, Schema } from "mongoose";
 
 type UserRole = "user" | "admin" | "owner";
 
-interface IUser extends Document {
+export interface IUser extends Document {
   dashboard: string;
   name: string;
   email: string;
