@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { useAppSelector, useAppDispatch } from "@/hooks/reduxToolkit";
-import { CheckboxInputField } from "@/types/form-types";
+import { CheckboxInputField, FormId } from "@/types/form-types";
 import HookTextInput from "@/component/react-hook-form-inputs/HookTextInput";
 import HookSelectInput from "@/component/react-hook-form-inputs/HookSelectInput";
 import PrimarySquareButton from "@/component/common/PrimarySquareButton";
@@ -13,14 +13,15 @@ import { updateCheckboxField } from "@/Store/slice/formSlice";
 interface CheckBoxFieldSettingProps {
   hide: () => void;
   id: string;
+  formId: FormId;
 }
 
-function CheckBoxFieldSetting({ hide, id }: CheckBoxFieldSettingProps) {
+function CheckBoxFieldSetting({ hide, id, formId }: CheckBoxFieldSettingProps) {
   const dispatch = useAppDispatch();
   const field = useAppSelector((state) =>
-    state.form.fields.find(
-      (field) => field.id === id && field.value === "checkbox"
-    )
+    state.form
+      .find((form) => form.id === formId)
+      ?.fields.find((field) => field.id === id)
   ) as CheckboxInputField;
 
   const {
@@ -50,7 +51,7 @@ function CheckBoxFieldSetting({ hide, id }: CheckBoxFieldSettingProps) {
   }
 
   function onSubmit(data: CheckboxInputField) {
-    dispatch(updateCheckboxField(data));
+    dispatch(updateCheckboxField({ data, formId }));
     hide();
   }
 

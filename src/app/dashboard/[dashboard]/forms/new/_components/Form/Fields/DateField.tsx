@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useAppDispatch } from "@/hooks/reduxToolkit";
 import { pushDown, pullUp, deleteField } from "@/Store/slice/formSlice";
 import DatePicker from "@/app/dashboard/[dashboard]/_components/common/DatePicker";
+import { FormId } from "@/types/form-types";
 
 type DateFieldProps = {
   label: string;
@@ -23,6 +24,7 @@ type DateFieldProps = {
   minDate?: string;
   maxDate?: string;
   weekStartsOn?: "0" | "1";
+  formId: FormId;
 };
 
 export function DateField({
@@ -38,6 +40,7 @@ export function DateField({
   minDate,
   maxDate,
   weekStartsOn = "0",
+  formId,
 }: DateFieldProps) {
   const dispatch = useAppDispatch();
   const [showOptions, setShowOptions] = useState<boolean>(false);
@@ -61,7 +64,7 @@ export function DateField({
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                dispatch(pullUp({ id, index }));
+                dispatch(pullUp({ id, index, formId }));
               }}
               className="p-1 cursor-pointer rounded-md hover:bg-light-fg-muted/10 dark:hover:bg-dark-fg-muted/10"
             >
@@ -74,7 +77,7 @@ export function DateField({
               onClick={(e) => {
                 e.stopPropagation();
                 console.log("push down clicked");
-                dispatch(pushDown({ id, index }));
+                dispatch(pushDown({ id, index, formId }));
               }}
               className="p-1 cursor-pointer rounded-md hover:bg-light-fg-muted/10 dark:hover:bg-dark-fg-muted/10"
             >
@@ -92,7 +95,7 @@ export function DateField({
           <button
             onClick={(e) => {
               e.stopPropagation();
-              dispatch(deleteField(id));
+              dispatch(deleteField({ id, formId }));
             }}
             className="p-1 cursor-pointer rounded-md hover:bg-red-500/10 text-red-500"
           >

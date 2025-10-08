@@ -1,6 +1,7 @@
 "use client";
 import DropDown from "@/component/headlessui/DropDown";
 import MenuBtn from "@/component/headlessui/MenuBtn";
+import { FormId } from "@/types/form-types";
 import { FormFieldOptions } from "@/types/form-types";
 import { MenuButton } from "@headlessui/react";
 import React from "react";
@@ -26,17 +27,19 @@ function AddFormField({
   disableScroll,
   enableScroll,
   fieldIndex,
+  formId,
 }: {
   disableScroll: () => void;
   enableScroll: () => void;
   fieldIndex: number;
+  formId: FormId;
 }) {
   const dispatch = useAppDispatch();
 
   function handleBtnClick(item: FormFieldOptions) {
     const data = addPropertyInField(item);
     if (data) {
-      dispatch(addField({ data: data, index: fieldIndex }));
+      dispatch(addField({ data: data, index: fieldIndex, formId }));
     }
   }
   return (

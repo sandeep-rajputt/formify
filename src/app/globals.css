@@ -80,3 +80,13 @@ body::-webkit-scrollbar {
   z-index: 5000000000;
   position: relative;
 }
+
+.delay-0 {
+  animation-delay: 0s;
+}
+.delay-150 {
+  animation-delay: 0.15s;
+}
+.delay-300 {
+  animation-delay: 0.3s;
+}

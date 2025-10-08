@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { useAppSelector, useAppDispatch } from "@/hooks/reduxToolkit";
-import { HeadingField } from "@/types/form-types";
+import { FormId, HeadingField } from "@/types/form-types";
 import HookTextInput from "@/component/react-hook-form-inputs/HookTextInput";
 import HookSelectInput from "@/component/react-hook-form-inputs/HookSelectInput";
 import PrimarySquareButton from "@/component/common/PrimarySquareButton";
@@ -14,14 +14,15 @@ import type { RootState } from "@/Store/store";
 interface HeadingFieldSettingProps {
   hide: () => void;
   id: string;
+  formId: FormId;
 }
 
-function HeadingFieldSetting({ hide, id }: HeadingFieldSettingProps) {
+function HeadingFieldSetting({ hide, id, formId }: HeadingFieldSettingProps) {
   const dispatch = useAppDispatch();
   const field = useAppSelector((state: RootState) =>
-    state.form.fields.find(
-      (fieldItem) => fieldItem.id === id && fieldItem.value === "heading"
-    )
+    state.form
+      .find((form) => form.id === formId)
+      ?.fields.find((field) => field.id === id)
   ) as HeadingField;
 
   const {
@@ -47,7 +48,7 @@ function HeadingFieldSetting({ hide, id }: HeadingFieldSettingProps) {
   }
 
   function onSubmit(data: HeadingField) {
-    dispatch(updateHeadingField(data));
+    dispatch(updateHeadingField({ data, formId }));
     hide();
   }
 

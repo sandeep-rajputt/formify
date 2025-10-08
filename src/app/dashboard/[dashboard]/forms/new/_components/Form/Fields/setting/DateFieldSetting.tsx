@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { useAppSelector, useAppDispatch } from "@/hooks/reduxToolkit";
-import { DateInputField } from "@/types/form-types";
+import { DateInputField, FormId } from "@/types/form-types";
 import HookTextInput from "@/component/react-hook-form-inputs/HookTextInput";
 import HookSelectInput from "@/component/react-hook-form-inputs/HookSelectInput";
 import HookDatePicker from "@/component/react-hook-form-inputs/HookDatePicker";
@@ -14,12 +14,15 @@ import { updateDateField } from "@/Store/slice/formSlice";
 interface DateFieldSettingProps {
   hide: () => void;
   id: string;
+  formId: FormId;
 }
 
-function DateFieldSetting({ hide, id }: DateFieldSettingProps) {
+function DateFieldSetting({ hide, id, formId }: DateFieldSettingProps) {
   const dispatch = useAppDispatch();
   const field = useAppSelector((state) =>
-    state.form.fields.find((field) => field.id === id && field.value === "date")
+    state.form
+      .find((form) => form.id === formId)
+      ?.fields.find((field) => field.id === id)
   ) as DateInputField;
 
   const {
@@ -51,7 +54,7 @@ function DateFieldSetting({ hide, id }: DateFieldSettingProps) {
   }
 
   function onSubmit(data: DateInputField) {
-    dispatch(updateDateField(data));
+    dispatch(updateDateField({ data, formId }));
     hide();
   }
 

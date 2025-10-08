@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { useAppSelector, useAppDispatch } from "@/hooks/reduxToolkit";
-import { ParagraphField } from "@/types/form-types";
+import { FormId, ParagraphField } from "@/types/form-types";
 import HookTextAreaInput from "@/component/react-hook-form-inputs/HookTextAreaInput";
 import PrimarySquareButton from "@/component/common/PrimarySquareButton";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,14 +13,19 @@ import type { RootState } from "@/Store/store";
 interface ParagraphFieldSettingProps {
   hide: () => void;
   id: string;
+  formId: FormId;
 }
 
-function ParagraphFieldSetting({ hide, id }: ParagraphFieldSettingProps) {
+function ParagraphFieldSetting({
+  hide,
+  id,
+  formId,
+}: ParagraphFieldSettingProps) {
   const dispatch = useAppDispatch();
   const field = useAppSelector((state: RootState) =>
-    state.form.fields.find(
-      (fieldItem) => fieldItem.id === id && fieldItem.value === "paragraph"
-    )
+    state.form
+      .find((form) => form.id === formId)
+      ?.fields.find((field) => field.id === id)
   ) as ParagraphField;
 
   const {
@@ -44,7 +49,7 @@ function ParagraphFieldSetting({ hide, id }: ParagraphFieldSettingProps) {
   }
 
   function onSubmit(data: ParagraphField) {
-    dispatch(updateParagraphField(data));
+    dispatch(updateParagraphField({ data, formId }));
     hide();
   }
 

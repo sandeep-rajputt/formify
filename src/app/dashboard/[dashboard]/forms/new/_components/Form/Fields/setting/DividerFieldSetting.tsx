@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { useAppSelector, useAppDispatch } from "@/hooks/reduxToolkit";
-import { DividerField } from "@/types/form-types";
+import { DividerField, FormId } from "@/types/form-types";
 import HookSelectInput from "@/component/react-hook-form-inputs/HookSelectInput";
 import PrimarySquareButton from "@/component/common/PrimarySquareButton";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,14 +13,15 @@ import type { RootState } from "@/Store/store";
 interface DividerFieldSettingProps {
   hide: () => void;
   id: string;
+  formId: FormId;
 }
 
-function DividerFieldSetting({ hide, id }: DividerFieldSettingProps) {
+function DividerFieldSetting({ hide, id, formId }: DividerFieldSettingProps) {
   const dispatch = useAppDispatch();
   const field = useAppSelector((state: RootState) =>
-    state.form.fields.find(
-      (fieldItem) => fieldItem.id === id && fieldItem.value === "divider"
-    )
+    state.form
+      .find((form) => form.id === formId)
+      ?.fields.find((field) => field.id === id)
   ) as DividerField;
 
   const {
@@ -46,7 +47,7 @@ function DividerFieldSetting({ hide, id }: DividerFieldSettingProps) {
   }
 
   function onSubmit(data: DividerField) {
-    dispatch(updateDividerField(data));
+    dispatch(updateDividerField({ data, formId }));
     hide();
   }
 

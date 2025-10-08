@@ -10,10 +10,12 @@
   },
   "dependencies": {
     "@auth/mongodb-adapter": "^3.10.0",
+    "@google/genai": "^1.22.0",
     "@headlessui/react": "^2.2.7",
     "@hookform/resolvers": "^5.2.2",
     "@reduxjs/toolkit": "^2.9.0",
     "date-fns": "^4.1.0",
+    "json5": "^2.2.3",
     "mongoose": "^8.18.1",
     "next": "15.5.2",
     "next-auth": "^4.24.11",

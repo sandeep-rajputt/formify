@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { useAppSelector, useAppDispatch } from "@/hooks/reduxToolkit";
-import { NumberInputField } from "@/types/form-types";
+import { FormId, NumberInputField } from "@/types/form-types";
 import HookTextInput from "@/component/react-hook-form-inputs/HookTextInput";
 import HookSelectInput from "@/component/react-hook-form-inputs/HookSelectInput";
 import PrimarySquareButton from "@/component/common/PrimarySquareButton";
@@ -13,14 +13,15 @@ import { updateNumberField } from "@/Store/slice/formSlice";
 interface NumberFieldSettingProps {
   hide: () => void;
   id: string;
+  formId: FormId;
 }
 
-function NumberFieldSetting({ hide, id }: NumberFieldSettingProps) {
+function NumberFieldSetting({ hide, id, formId }: NumberFieldSettingProps) {
   const dispatch = useAppDispatch();
   const field = useAppSelector((state) =>
-    state.form.fields.find(
-      (field) => field.id === id && field.value === "number"
-    )
+    state.form
+      .find((form) => form.id === formId)
+      ?.fields.find((field) => field.id === id)
   ) as NumberInputField;
 
   const {
@@ -50,7 +51,7 @@ function NumberFieldSetting({ hide, id }: NumberFieldSettingProps) {
   }
 
   function onSubmit(data: NumberInputField) {
-    dispatch(updateNumberField(data));
+    dispatch(updateNumberField({ data, formId }));
     hide();
   }
 

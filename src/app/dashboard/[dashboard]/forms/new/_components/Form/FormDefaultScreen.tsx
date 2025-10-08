@@ -1,11 +1,14 @@
 import AddFormField from "@/app/dashboard/[dashboard]/forms/new/_components/Form/AddFormField";
+import { FormId } from "@/types/form-types";
 
 function FormDefaultScreen({
   disableScroll,
   enableScroll,
+  formId,
 }: {
   disableScroll: () => void;
   enableScroll: () => void;
+  formId: FormId;
 }) {
   return (
     <div className="min-h-[500px] flex items-center justify-center p-8 sm:py-8 py-14">
@@ -46,6 +49,7 @@ function FormDefaultScreen({
               disableScroll={disableScroll}
               enableScroll={enableScroll}
               fieldIndex={0}
+              formId={formId}
             />
           </div>
 

@@ -4,9 +4,9 @@ import PrimaryCard from "@/component/common/PrimaryCard";
 import PrimarySquareButton from "@/component/common/PrimarySquareButton";
 import HookTextInput from "@/component/react-hook-form-inputs/HookTextInput";
 import HookTextAreaInput from "@/component/react-hook-form-inputs/HookTextAreaInput";
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import type { FormSetting } from "@/types/form-types";
+import type { FormId, FormSetting, Form } from "@/types/form-types";
 import { formSettingSchema } from "@/schema/formSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAppSelector, useAppDispatch } from "@/hooks/reduxToolkit";
@@ -15,11 +15,21 @@ import { updateFormSetting } from "@/Store/slice/formSlice";
 
 interface FormSettingModalProps {
   hide: () => void;
+  formId: FormId;
 }
 
-function FormSettingModal({ hide }: FormSettingModalProps) {
+function FormSettingModal({ hide, formId }: FormSettingModalProps) {
   const dispatch = useAppDispatch();
-  const formSetting = useAppSelector((state) => state.form.setting);
+  const formData = useAppSelector((state) =>
+    state.form.find((form) => form.id === formId)
+  );
+  const Box = useRef<HTMLDivElement>(null);
+  const [defaultValues, setDefaultValues] = useState<FormSetting>({
+    formName: "Untitled Form",
+    formDescription: "",
+    theme: "light",
+  });
+
   const {
     register,
     handleSubmit,
@@ -27,13 +37,24 @@ function FormSettingModal({ hide }: FormSettingModalProps) {
     formState: { errors },
   } = useForm<FormSetting>({
     resolver: zodResolver(formSettingSchema),
-    defaultValues: {
-      formName: formSetting.formName,
-      formDescription: formSetting.formDescription,
-      theme: formSetting.theme,
-    },
+    defaultValues,
   });
-  const Box = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (formData) {
+      const newDefaultValues = {
+        formName: formData.setting.formName,
+        formDescription: formData.setting.formDescription,
+        theme: formData.setting.theme,
+      };
+      setDefaultValues(newDefaultValues);
+    }
+  }, [formId, formData]);
+
+  if (!formData) {
+    hide();
+    return null;
+  }
 
   function handleOutterClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     if (Box.current === e.target) {
@@ -42,7 +63,7 @@ function FormSettingModal({ hide }: FormSettingModalProps) {
   }
 
   function onSubmit(data: FormSetting) {
-    dispatch(updateFormSetting(data));
+    dispatch(updateFormSetting({ data, formId }));
     hide();
   }
 

@@ -7,6 +7,7 @@ import { HiOutlineTrash } from "react-icons/hi2";
 import { useState } from "react";
 import { useAppDispatch } from "@/hooks/reduxToolkit";
 import { pushDown, pullUp, deleteField } from "@/Store/slice/formSlice";
+import { FormId } from "@/types/form-types";
 
 type DividerFieldProps = {
   height: "0.5" | "1" | "2" | "3" | "4";
@@ -16,6 +17,7 @@ type DividerFieldProps = {
   index: number;
   totalFields: number;
   setFieldSetting: () => void;
+  formId: FormId;
 };
 
 export function DividerField({
@@ -26,6 +28,7 @@ export function DividerField({
   index,
   totalFields,
   setFieldSetting,
+  formId,
 }: DividerFieldProps) {
   const dispatch = useAppDispatch();
   const [showOptions, setShowOptions] = useState<boolean>(false);
@@ -49,7 +52,7 @@ export function DividerField({
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                dispatch(pullUp({ id, index }));
+                dispatch(pullUp({ id, index, formId }));
               }}
               className="p-1 cursor-pointer rounded-md hover:bg-light-fg-muted/10 dark:hover:bg-dark-fg-muted/10"
             >
@@ -61,7 +64,7 @@ export function DividerField({
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                dispatch(pushDown({ id, index }));
+                dispatch(pushDown({ id, index, formId }));
               }}
               className="p-1 cursor-pointer rounded-md hover:bg-light-fg-muted/10 dark:hover:bg-dark-fg-muted/10"
             >
@@ -79,7 +82,7 @@ export function DividerField({
           <button
             onClick={(e) => {
               e.stopPropagation();
-              dispatch(deleteField(id));
+              dispatch(deleteField({ id, formId }));
             }}
             className="p-1 cursor-pointer rounded-md hover:bg-red-500/10 text-red-500"
           >

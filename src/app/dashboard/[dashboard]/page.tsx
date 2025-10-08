@@ -1,4 +1,3 @@
-import DatePicker from "./_components/common/DatePicker";
 import SimpleLink from "@/component/common/SimpleLink";
 import PrimaryLink from "@/component/common/PrimaryLink";
 
@@ -56,9 +55,6 @@ async function Dashboard({
       <div className="max-w-2xl w-full text-center space-y-8 flex flex-col items-center">
         {/* Welcome Section */}
         <div className="space-y-4">
-          <div>
-            <DatePicker mode="range" />
-          </div>
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
             Welcome to Formify, {userName}! 👋
           </h1>

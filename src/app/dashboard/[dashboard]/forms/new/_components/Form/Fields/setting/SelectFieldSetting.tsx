@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { useAppSelector, useAppDispatch } from "@/hooks/reduxToolkit";
-import { SelectInputField } from "@/types/form-types";
+import { FormId, SelectInputField } from "@/types/form-types";
 import type { RootState } from "@/Store/store";
 import HookTextInput from "@/component/react-hook-form-inputs/HookTextInput";
 import HookSelectInput from "@/component/react-hook-form-inputs/HookSelectInput";
@@ -17,14 +17,15 @@ import { useState } from "react";
 interface SelectFieldSettingProps {
   hide: () => void;
   id: string;
+  formId: FormId;
 }
 
-function SelectFieldSetting({ hide, id }: SelectFieldSettingProps) {
+function SelectFieldSetting({ hide, id, formId }: SelectFieldSettingProps) {
   const dispatch = useAppDispatch();
   const field = useAppSelector((state: RootState) =>
-    state.form.fields.find(
-      (fieldItem) => fieldItem.id === id && fieldItem.value === "select"
-    )
+    state.form
+      .find((form) => form.id === formId)
+      ?.fields.find((field) => field.id === id)
   ) as SelectInputField;
 
   const [options, setOptions] = useState<Array<{ label: string; id: string }>>(
@@ -75,7 +76,7 @@ function SelectFieldSetting({ hide, id }: SelectFieldSettingProps) {
 
   function onSubmit(data: SelectInputField) {
     const formData = { ...data, options };
-    dispatch(updateSelectField(formData));
+    dispatch(updateSelectField({ data: formData, formId }));
     hide();
   }
 

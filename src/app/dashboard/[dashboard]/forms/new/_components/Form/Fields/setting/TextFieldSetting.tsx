@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { useAppSelector, useAppDispatch } from "@/hooks/reduxToolkit";
-import { TextInputField } from "@/types/form-types";
+import { FormId, TextInputField } from "@/types/form-types";
 import HookTextInput from "@/component/react-hook-form-inputs/HookTextInput";
 import HookSelectInput from "@/component/react-hook-form-inputs/HookSelectInput";
 import PrimarySquareButton from "@/component/common/PrimarySquareButton";
@@ -13,14 +13,15 @@ import { updateTextField } from "@/Store/slice/formSlice";
 interface TextFieldSettingProps {
   hide: () => void;
   id: string;
+  formId: FormId;
 }
 
-function TextFieldSetting({ hide, id }: TextFieldSettingProps) {
+function TextFieldSetting({ hide, id, formId }: TextFieldSettingProps) {
   const dispatch = useAppDispatch();
   const field = useAppSelector((state) =>
-    state.form.fields.find(
-      (field) => field.id === id && field.value === "text-input"
-    )
+    state.form
+      .find((form) => form.id === formId)
+      ?.fields.find((field) => field.id === id)
   ) as TextInputField;
 
   const {
@@ -50,7 +51,7 @@ function TextFieldSetting({ hide, id }: TextFieldSettingProps) {
   }
 
   function onSubmit(data: TextInputField) {
-    dispatch(updateTextField(data));
+    dispatch(updateTextField({ data, formId }));
     hide();
   }
 

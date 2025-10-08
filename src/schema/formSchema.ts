@@ -82,9 +82,20 @@ export const formFieldOptionsSchema = z.union([
   listFieldSchema,
 ]);
 
+const validId = z.string().refine(
+  (value) => {
+    const regex =
+      /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;
+    return regex.test(value); // ✅ return boolean
+  },
+  {
+    message: "Invalid UUIDv4 format",
+  }
+);
+
 export const textInputSchema = textInputFieldSchema
   .extend({
-    id: z.string().uuid(),
+    id: validId,
     label: z
       .string()
       .min(1, { message: "Label is required" })
@@ -132,7 +143,7 @@ export const textInputSchema = textInputFieldSchema
 
 export const longTextInputSchema = longTextInputFieldSchema
   .extend({
-    id: z.string().uuid(),
+    id: validId,
     label: z
       .string()
       .min(1, { message: "Label is required" })
@@ -181,7 +192,7 @@ export const longTextInputSchema = longTextInputFieldSchema
 
 export const numberInputSchema = numberInputFieldSchema
   .extend({
-    id: z.string().uuid(),
+    id: validId,
     label: z
       .string()
       .min(1, { message: "Label is required" })
@@ -230,7 +241,7 @@ export const numberInputSchema = numberInputFieldSchema
   });
 
 export const emailInputSchema = emailInputFieldSchema.extend({
-  id: z.string().uuid(),
+  id: validId,
   label: z
     .string()
     .min(1, { message: "Label is required" })
@@ -249,7 +260,7 @@ export const emailInputSchema = emailInputFieldSchema.extend({
 
 export const dateInputSchema = dateInputFieldSchema
   .extend({
-    id: z.string().uuid(),
+    id: validId,
     label: z
       .string()
       .min(1, { message: "Label is required" })
@@ -290,7 +301,7 @@ export const dateInputSchema = dateInputFieldSchema
 
 export const checkboxInputSchema = checkboxInputFieldSchema
   .extend({
-    id: z.string().uuid(),
+    id: validId,
     label: z
       .string()
       .max(50, { message: "Label can't be more than 50 characters" })
@@ -320,7 +331,7 @@ export const checkboxInputSchema = checkboxInputFieldSchema
 
 export const selectInputSchema = selectInputFieldSchema
   .extend({
-    id: z.string().uuid(),
+    id: validId,
     label: z
       .string()
       .min(1, { message: "Label is required" })
@@ -337,7 +348,7 @@ export const selectInputSchema = selectInputFieldSchema
           .max(50, {
             message: "Option label can't be more than 50 characters",
           }),
-        id: z.string().uuid(),
+        id: validId,
       })
     ),
     required: z.boolean().default(false),
@@ -359,7 +370,7 @@ export const selectInputSchema = selectInputFieldSchema
   });
 
 export const headingSchema = headingFieldSchema.extend({
-  id: z.string().uuid(),
+  id: validId,
   label: z
     .string()
     .min(1, { message: "Label is required" })
@@ -370,7 +381,7 @@ export const headingSchema = headingFieldSchema.extend({
 });
 
 export const paragraphSchema = paragraphFieldSchema.extend({
-  id: z.string().uuid(),
+  id: validId,
   content: z
     .string()
     .min(1, { message: "Content is required" })
@@ -378,14 +389,14 @@ export const paragraphSchema = paragraphFieldSchema.extend({
 });
 
 export const dividerSchema = dividerFieldSchema.extend({
-  id: z.string().uuid(),
+  id: validId,
   height: z.enum(["0.5", "1", "2", "3", "4"]).default("1"),
   spaceTop: z.enum(["5", "10", "15", "20", "25", "30"]).default("5"),
   spaceBottom: z.enum(["5", "10", "15", "20", "25", "30"]).default("5"),
 });
 
 export const listSchema = listFieldSchema.extend({
-  id: z.string().uuid(),
+  id: validId,
   label: z
     .string()
     .min(1, { message: "Label is required" })
@@ -421,26 +432,105 @@ export const formSettingSchema = z.object({
     .string()
     .min(1, { message: "Form name is required" })
     .max(50, { message: "Form name can't be more than 50 characters" }),
-  formDescription: z.string().max(500, {
-    message: "Form description can't be more than 500 characters",
-  }),
+  formDescription: z
+    .string()
+    .max(500, {
+      message: "Form description can't be more than 500 characters",
+    })
+    .optional(),
   theme: z.enum(["light", "dark", "system"]),
 });
 
+// chatSchema
+export const chatSchema = z.object({
+  role: z.enum(["user", "model"]),
+  parts: z.array(
+    z.object({
+      text: z.string(),
+    })
+  ),
+});
+
+export const chatsSchema = z.array(chatSchema);
+
+// chatFormIdSchema
+export const formIdSchema = z.union([validId, z.literal("new-form")]);
+
+//conversation
+export const conversationSchema = chatsSchema;
+
 // formFieldInitialState
-export const FormInitialStateSchema = z.object({
+export const FormSchema = z.object({
+  id: formIdSchema,
   fields: z.array(formFieldsSchema),
   setting: formSettingSchema,
+  conversation: conversationSchema,
 });
+
+export const FormsSchema = z.array(FormSchema);
 
 export const addFieldActionSchema = z.object({
   payload: z.object({
     data: formFieldsSchema,
     index: z.number().nonnegative(),
+    formId: formIdSchema,
   }),
   type: z.string(),
 });
 
 export const updateFormSettingActionSchema = z.object({
   payload: formSettingSchema,
+});
+
+export const tivoraAiResponseSystemSchema = z
+  .object({
+    form: z
+      .object({
+        fields: z.array(formFieldsSchema),
+        setting: formSettingSchema,
+      })
+      .optional(),
+    formFields: z.array(formFieldsSchema).optional(),
+    formSetting: formSettingSchema.optional(),
+    addField: z
+      .array(
+        z.object({
+          data: formFieldsSchema,
+          index: z.number(),
+        })
+      )
+      .optional(),
+    remove: z.array(z.string().uuid()).optional(),
+    updateField: z.array(formFieldsSchema).optional(),
+    addFieldAfter: z
+      .array(
+        z.object({
+          data: formFieldsSchema,
+          afterId: validId,
+        })
+      )
+      .optional(),
+    addFieldBefore: z
+      .array(
+        z.object({
+          data: formFieldsSchema,
+          beforeId: validId,
+        })
+      )
+      .optional(),
+    moveField: z
+      .array(
+        z.object({
+          id: validId,
+          newIndex: z.number(),
+        })
+      )
+      .optional(),
+  })
+  .optional();
+
+// tivoraAiResponseSchema
+export const tivoraAiResponseSchema = z.object({
+  system: tivoraAiResponseSystemSchema,
+  userMessage: z.string(),
 });

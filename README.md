@@ -1,12 +1,11 @@
 # Formify
 
-Formify is an **`AI-powered drag-and-drop`** form builder that helps you create customizable, smart, and professional forms in minutes. Designed for developers, freelancers, and teams, it allows you to quickly build and manage forms with modern features like conditional logic, analytics, and third-party integrations. With AI assistance, you can generate complete forms instantly from simple prompts, making form creation faster and more intuitive.
+Formify is an **`AI-powered form builder`** that helps you create customizable, smart, and professional forms in minutes. Designed for developers, freelancers, and teams, it allows you to quickly build and manage forms with modern features like conditional logic, analytics, and third-party integrations. With AI assistance, you can generate complete forms instantly from simple prompts, making form creation faster and more intuitive.
 
 ---
 
 ## ✨ Features
 
-- 🖱️ Drag-and-drop form builder
 - 🔗 Integrations (Google Sheets, Webhooks, etc.)
 - 📊 Analytics (views, submissions, conversion rates)
 - ⚡ Conditional logic (show/hide fields)

@@ -8,6 +8,7 @@ import { HiOutlineTrash } from "react-icons/hi2";
 import { useState } from "react";
 import { useAppDispatch } from "@/hooks/reduxToolkit";
 import { pushDown, pullUp, deleteField } from "@/Store/slice/formSlice";
+import { FormId } from "@/types/form-types";
 
 type NumberFieldProps = {
   label: string;
@@ -20,6 +21,7 @@ type NumberFieldProps = {
   setFieldSetting: () => void;
   min?: number;
   max?: number;
+  formId: FormId;
 };
 
 export function NumberField({
@@ -33,6 +35,7 @@ export function NumberField({
   setFieldSetting,
   min,
   max,
+  formId,
 }: NumberFieldProps) {
   const dispatch = useAppDispatch();
   const [showOptions, setShowOptions] = useState<boolean>(false);
@@ -56,7 +59,7 @@ export function NumberField({
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                dispatch(pullUp({ id, index }));
+                dispatch(pullUp({ id, index, formId }));
               }}
               className="p-1 cursor-pointer rounded-md hover:bg-light-fg-muted/10 dark:hover:bg-dark-fg-muted/10"
             >
@@ -69,7 +72,7 @@ export function NumberField({
               onClick={(e) => {
                 e.stopPropagation();
                 console.log("push down clicked");
-                dispatch(pushDown({ id, index }));
+                dispatch(pushDown({ id, index, formId }));
               }}
               className="p-1 cursor-pointer rounded-md hover:bg-light-fg-muted/10 dark:hover:bg-dark-fg-muted/10"
             >
@@ -87,7 +90,7 @@ export function NumberField({
           <button
             onClick={(e) => {
               e.stopPropagation();
-              dispatch(deleteField(id));
+              dispatch(deleteField({ id, formId }));
             }}
             className="p-1 cursor-pointer rounded-md hover:bg-red-500/10 text-red-500"
           >

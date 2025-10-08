@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { useAppSelector, useAppDispatch } from "@/hooks/reduxToolkit";
-import { EmailInputField } from "@/types/form-types";
+import { EmailInputField, FormId } from "@/types/form-types";
 import HookTextInput from "@/component/react-hook-form-inputs/HookTextInput";
 import HookSelectInput from "@/component/react-hook-form-inputs/HookSelectInput";
 import PrimarySquareButton from "@/component/common/PrimarySquareButton";
@@ -13,14 +13,15 @@ import { updateEmailField } from "@/Store/slice/formSlice";
 interface EmailFieldSettingProps {
   hide: () => void;
   id: string;
+  formId: FormId;
 }
 
-function EmailFieldSetting({ hide, id }: EmailFieldSettingProps) {
+function EmailFieldSetting({ hide, id, formId }: EmailFieldSettingProps) {
   const dispatch = useAppDispatch();
   const field = useAppSelector((state) =>
-    state.form.fields.find(
-      (field) => field.id === id && field.value === "email"
-    )
+    state.form
+      .find((form) => form.id === formId)
+      ?.fields.find((field) => field.id === id)
   ) as EmailInputField;
 
   const {
@@ -48,7 +49,7 @@ function EmailFieldSetting({ hide, id }: EmailFieldSettingProps) {
   }
 
   function onSubmit(data: EmailInputField) {
-    dispatch(updateEmailField(data));
+    dispatch(updateEmailField({ data, formId }));
     hide();
   }
 

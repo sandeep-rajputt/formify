@@ -9,6 +9,7 @@ import { useAppDispatch } from "@/hooks/reduxToolkit";
 import { pushDown, pullUp, deleteField } from "@/Store/slice/formSlice";
 import HookSelectInput from "@/component/react-hook-form-inputs/HookSelectInput";
 import { useForm } from "react-hook-form";
+import { FormId } from "@/types/form-types";
 
 type SelectFieldProps = {
   label: string;
@@ -19,6 +20,7 @@ type SelectFieldProps = {
   index: number;
   totalFields: number;
   setFieldSetting: () => void;
+  formId: FormId;
 };
 
 export function SelectField({
@@ -29,6 +31,7 @@ export function SelectField({
   options,
   index,
   totalFields,
+  formId,
   setFieldSetting,
 }: SelectFieldProps) {
   const dispatch = useAppDispatch();
@@ -66,7 +69,7 @@ export function SelectField({
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                dispatch(pullUp({ id, index }));
+                dispatch(pullUp({ id, index, formId }));
               }}
               className="p-1 cursor-pointer rounded-md hover:bg-light-fg-muted/10 dark:hover:bg-dark-fg-muted/10"
             >
@@ -78,7 +81,7 @@ export function SelectField({
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                dispatch(pushDown({ id, index }));
+                dispatch(pushDown({ id, index, formId }));
               }}
               className="p-1 cursor-pointer rounded-md hover:bg-light-fg-muted/10 dark:hover:bg-dark-fg-muted/10"
             >
@@ -96,7 +99,7 @@ export function SelectField({
           <button
             onClick={(e) => {
               e.stopPropagation();
-              dispatch(deleteField(id));
+              dispatch(deleteField({ id, formId }));
             }}
             className="p-1 cursor-pointer rounded-md hover:bg-red-500/10 text-red-500"
           >

@@ -1,7 +1,8 @@
 import {
   formFieldOptionsSchema,
   formFieldsSchema,
-  FormInitialStateSchema,
+  FormSchema,
+  FormsSchema,
   textInputSchema,
   addFieldActionSchema,
   formSettingSchema,
@@ -16,6 +17,11 @@ import {
   paragraphSchema,
   dividerSchema,
   listSchema,
+  formIdSchema,
+  chatSchema,
+  chatsSchema,
+  tivoraAiResponseSchema,
+  tivoraAiResponseSystemSchema,
 } from "@/schema/formSchema";
 import z from "zod";
 
@@ -25,8 +31,9 @@ export type FormFieldOptions = z.infer<typeof formFieldOptionsSchema>;
 // for formContainer.tsx
 export type FormFields = z.infer<typeof formFieldsSchema>;
 
-// for formFieldSlice.tsx
-export type FormInitialState = z.infer<typeof FormInitialStateSchema>;
+// for formSlice.ts
+export type Form = z.infer<typeof FormSchema>;
+export type Forms = z.infer<typeof FormsSchema>;
 
 // addForm(state, action) // for this action
 export type AddFieldAction = z.infer<typeof addFieldActionSchema>;
@@ -35,6 +42,13 @@ export type AddFieldAction = z.infer<typeof addFieldActionSchema>;
 export type UpdateFormSettingAction = z.infer<
   typeof updateFormSettingActionSchema
 >;
+
+// chatSchema
+export type Chat = z.infer<typeof chatSchema>;
+export type Chats = z.infer<typeof chatsSchema>;
+
+// formIdSchema
+export type FormId = z.infer<typeof formIdSchema>;
 
 // for form setting
 export type FormSetting = z.infer<typeof formSettingSchema>;
@@ -71,3 +85,11 @@ export type DividerField = z.infer<typeof dividerSchema>;
 
 // listSchema
 export type ListField = z.infer<typeof listSchema>;
+
+// tivoraAiResponseSchema
+export type TivoraAiResponse = z.infer<typeof tivoraAiResponseSchema>;
+
+// tivoraAiResponseSystemSchema
+export type tivoraAiResponseSystem = z.infer<
+  typeof tivoraAiResponseSystemSchema
+>;

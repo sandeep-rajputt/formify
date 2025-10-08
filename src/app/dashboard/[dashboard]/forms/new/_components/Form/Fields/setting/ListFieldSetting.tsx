@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { useAppSelector, useAppDispatch } from "@/hooks/reduxToolkit";
-import { ListField } from "@/types/form-types";
+import { FormId, ListField } from "@/types/form-types";
 import HookTextInput from "@/component/react-hook-form-inputs/HookTextInput";
 import HookSelectInput from "@/component/react-hook-form-inputs/HookSelectInput";
 import PrimarySquareButton from "@/component/common/PrimarySquareButton";
@@ -16,14 +16,15 @@ import type { RootState } from "@/Store/store";
 interface ListFieldSettingProps {
   hide: () => void;
   id: string;
+  formId: FormId;
 }
 
-function ListFieldSetting({ hide, id }: ListFieldSettingProps) {
+function ListFieldSetting({ hide, id, formId }: ListFieldSettingProps) {
   const dispatch = useAppDispatch();
   const field = useAppSelector((state: RootState) =>
-    state.form.fields.find(
-      (fieldItem) => fieldItem.id === id && fieldItem.value === "list"
-    )
+    state.form
+      .find((form) => form.id === formId)
+      ?.fields.find((field) => field.id === id)
   ) as ListField;
 
   const [items, setItems] = useState<string[]>(
@@ -57,7 +58,7 @@ function ListFieldSetting({ hide, id }: ListFieldSettingProps) {
 
   function onSubmit(data: ListField) {
     const formData = { ...data, items };
-    dispatch(updateListField(formData));
+    dispatch(updateListField({ data: formData, formId }));
     hide();
   }
 

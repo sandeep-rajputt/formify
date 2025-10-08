@@ -12,9 +12,9 @@ import FieldSetting from "@/app/dashboard/[dashboard]/forms/new/_components/Form
 import { LongTextField } from "@/app/dashboard/[dashboard]/forms/new/_components/Form/Fields/LongTextField";
 import { EmailField } from "@/app/dashboard/[dashboard]/forms/new/_components/Form/Fields/EmailField";
 import { NumberField } from "@/app/dashboard/[dashboard]/forms/new/_components/Form/Fields/NumberField";
-import { FormFieldOptions } from "@/types/form-types";
+import { FormFieldOptions, FormId } from "@/types/form-types";
 import { DateField } from "@/app/dashboard/[dashboard]/forms/new/_components/Form/Fields/DateField";
-import { FormInitialStateSchema } from "@/schema/formSchema";
+import { FormSchema } from "@/schema/formSchema";
 import { CheckBoxField } from "@/app/dashboard/[dashboard]/forms/new/_components/Form/Fields/CheckBoxField";
 import { SelectField } from "@/app/dashboard/[dashboard]/forms/new/_components/Form/Fields/SelectField";
 import { HeadingField } from "@/app/dashboard/[dashboard]/forms/new/_components/Form/Fields/HeadingField";
@@ -23,8 +23,11 @@ import { DividerField } from "@/app/dashboard/[dashboard]/forms/new/_components/
 import { ListField } from "@/app/dashboard/[dashboard]/forms/new/_components/Form/Fields/ListField";
 import z from "zod";
 
-function FormContainer() {
-  const { fields, setting } = useAppSelector((state) => state.form);
+function FormContainer({ formId }: { formId: FormId }) {
+  const { fields, setting } = useAppSelector((state) => {
+    const form = state.form.find((form) => form.id === formId);
+    return form ? form : { fields: undefined, setting: undefined };
+  });
   const [disableScroll, setDisableScroll] = useState<boolean>(false);
   const [scrollbarTakesSpace, setScrollbarTakesSpace] =
     useState<boolean>(false);
@@ -46,7 +49,7 @@ function FormContainer() {
   function handlePublish() {
     const data = { fields, setting };
     try {
-      FormInitialStateSchema.parse(data);
+      FormSchema.parse(data);
       console.log("Form data is valid:", data);
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -56,6 +59,10 @@ function FormContainer() {
         console.error("An unexpected error occurred during validation:", error);
       }
     }
+  }
+
+  if (fields === undefined && setting === undefined) {
+    return;
   }
 
   return (
@@ -109,6 +116,7 @@ function FormContainer() {
             <FormDefaultScreen
               disableScroll={() => setDisableScroll(true)}
               enableScroll={() => setDisableScroll(false)}
+              formId={formId}
             />
           ) : (
             <div className="flex flex-col gap-2 my-10">
@@ -117,6 +125,7 @@ function FormContainer() {
                   disableScroll={() => setDisableScroll(true)}
                   enableScroll={() => setDisableScroll(false)}
                   fieldIndex={0}
+                  formId={formId}
                 />
               )}
               <div className="flex flex-col gap-5">
@@ -143,6 +152,7 @@ function FormContainer() {
                           label={item.label}
                           required={item.required}
                           description={item.description}
+                          formId={formId}
                         />
 
                         {fields.length <= 50 && (
@@ -150,6 +160,7 @@ function FormContainer() {
                             disableScroll={() => setDisableScroll(true)}
                             enableScroll={() => setDisableScroll(false)}
                             fieldIndex={index + 1}
+                            formId={formId}
                           />
                         )}
                       </Fragment>
@@ -176,6 +187,7 @@ function FormContainer() {
                           label={item.label}
                           required={item.required}
                           description={item.description}
+                          formId={formId}
                         />
 
                         {fields.length <= 50 && (
@@ -183,6 +195,7 @@ function FormContainer() {
                             disableScroll={() => setDisableScroll(true)}
                             enableScroll={() => setDisableScroll(false)}
                             fieldIndex={index + 1}
+                            formId={formId}
                           />
                         )}
                       </Fragment>
@@ -211,12 +224,14 @@ function FormContainer() {
                           description={item.description}
                           min={item.min}
                           max={item.max}
+                          formId={formId}
                         />
                         {fields.length <= 50 && (
                           <AddFormField
                             disableScroll={() => setDisableScroll(true)}
                             enableScroll={() => setDisableScroll(false)}
                             fieldIndex={index + 1}
+                            formId={formId}
                           />
                         )}
                       </Fragment>
@@ -243,12 +258,14 @@ function FormContainer() {
                           label={item.label}
                           required={item.required}
                           description={item.description}
+                          formId={formId}
                         />
                         {fields.length <= 50 && (
                           <AddFormField
                             disableScroll={() => setDisableScroll(true)}
                             enableScroll={() => setDisableScroll(false)}
                             fieldIndex={index + 1}
+                            formId={formId}
                           />
                         )}
                       </Fragment>
@@ -279,12 +296,14 @@ function FormContainer() {
                           minDate={item.minDate}
                           maxDate={item.maxDate}
                           weekStartsOn={item.weekStartsOn}
+                          formId={formId}
                         />
                         {fields.length <= 50 && (
                           <AddFormField
                             disableScroll={() => setDisableScroll(true)}
                             enableScroll={() => setDisableScroll(false)}
                             fieldIndex={index + 1}
+                            formId={formId}
                           />
                         )}
                       </Fragment>
@@ -310,12 +329,14 @@ function FormContainer() {
                           label={item.label}
                           required={item.required}
                           description={item.description}
+                          formId={formId}
                         />
                         {fields.length <= 50 && (
                           <AddFormField
                             disableScroll={() => setDisableScroll(true)}
                             enableScroll={() => setDisableScroll(false)}
                             fieldIndex={index + 1}
+                            formId={formId}
                           />
                         )}
                       </Fragment>
@@ -342,12 +363,14 @@ function FormContainer() {
                           required={item.required}
                           description={item.description}
                           options={item.options}
+                          formId={formId}
                         />
                         {fields.length <= 50 && (
                           <AddFormField
                             disableScroll={() => setDisableScroll(true)}
                             enableScroll={() => setDisableScroll(false)}
                             fieldIndex={index + 1}
+                            formId={formId}
                           />
                         )}
                       </Fragment>
@@ -372,12 +395,14 @@ function FormContainer() {
                           id={item.id}
                           label={item.label}
                           level={item.level}
+                          formId={formId}
                         />
                         {fields.length <= 50 && (
                           <AddFormField
                             disableScroll={() => setDisableScroll(true)}
                             enableScroll={() => setDisableScroll(false)}
                             fieldIndex={index + 1}
+                            formId={formId}
                           />
                         )}
                       </Fragment>
@@ -401,12 +426,14 @@ function FormContainer() {
                           index={index}
                           id={item.id}
                           content={item.content}
+                          formId={formId}
                         />
                         {fields.length <= 50 && (
                           <AddFormField
                             disableScroll={() => setDisableScroll(true)}
                             enableScroll={() => setDisableScroll(false)}
                             fieldIndex={index + 1}
+                            formId={formId}
                           />
                         )}
                       </Fragment>
@@ -432,12 +459,14 @@ function FormContainer() {
                           height={item.height}
                           spaceTop={item.spaceTop}
                           spaceBottom={item.spaceBottom}
+                          formId={formId}
                         />
                         {fields.length <= 50 && (
                           <AddFormField
                             disableScroll={() => setDisableScroll(true)}
                             enableScroll={() => setDisableScroll(false)}
                             fieldIndex={index + 1}
+                            formId={formId}
                           />
                         )}
                       </Fragment>
@@ -463,12 +492,14 @@ function FormContainer() {
                           label={item.label}
                           items={item.items}
                           ordered={item.ordered}
+                          formId={formId}
                         />
                         {fields.length <= 50 && (
                           <AddFormField
                             disableScroll={() => setDisableScroll(true)}
                             enableScroll={() => setDisableScroll(false)}
                             fieldIndex={index + 1}
+                            formId={formId}
                           />
                         )}
                       </Fragment>
@@ -482,13 +513,17 @@ function FormContainer() {
         </div>
         {showFormSetting && (
           <NewPortal>
-            <FormSettingModal hide={() => setShowFormSetting(false)} />
+            <FormSettingModal
+              hide={() => setShowFormSetting(false)}
+              formId={formId}
+            />
           </NewPortal>
         )}
         {fieldSetting.show && fieldSetting.id && fieldSetting.info && (
           <NewPortal>
             <FieldSetting
               id={fieldSetting.id}
+              formId={formId}
               hide={() =>
                 setFieldSetting({ show: false, id: null, info: null })
               }

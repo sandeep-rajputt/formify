@@ -3,7 +3,7 @@
 import React, { useRef } from "react";
 import PrimaryCard from "@/component/common/PrimaryCard";
 import TextFieldSetting from "@/app/dashboard/[dashboard]/forms/new/_components/Form/Fields/setting/TextFieldSetting";
-import { FormFieldOptions } from "@/types/form-types";
+import { FormFieldOptions, FormId } from "@/types/form-types";
 import LongTextFieldSetting from "@/app/dashboard/[dashboard]/forms/new/_components/Form/Fields/setting/LongTextFieldSetting";
 import NumberFieldSetting from "@/app/dashboard/[dashboard]/forms/new/_components/Form/Fields/setting/NumberFieldSetting";
 import EmailFieldSetting from "@/app/dashboard/[dashboard]/forms/new/_components/Form/Fields/setting/EmailFieldSetting";
@@ -19,9 +19,10 @@ interface FieldSetting {
   hide: () => void;
   id: string;
   fieldInfo: FormFieldOptions;
+  formId: FormId;
 }
 
-function FieldSetting({ hide, id, fieldInfo }: FieldSetting) {
+function FieldSetting({ hide, id, fieldInfo, formId }: FieldSetting) {
   const Box = useRef<HTMLDivElement>(null);
 
   function handleOutterClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
@@ -45,37 +46,37 @@ function FieldSetting({ hide, id, fieldInfo }: FieldSetting) {
         </div>
         <div className="flex-1  px-4 pb-4 pt-4">
           {fieldInfo.value === "text-input" && (
-            <TextFieldSetting hide={hide} id={id} />
+            <TextFieldSetting hide={hide} id={id} formId={formId} />
           )}
           {fieldInfo.value === "long-text" && (
-            <LongTextFieldSetting hide={hide} id={id} />
+            <LongTextFieldSetting hide={hide} id={id} formId={formId} />
           )}
           {fieldInfo.value === "number" && (
-            <NumberFieldSetting hide={hide} id={id} />
+            <NumberFieldSetting hide={hide} id={id} formId={formId} />
           )}
           {fieldInfo.value === "email" && (
-            <EmailFieldSetting hide={hide} id={id} />
+            <EmailFieldSetting hide={hide} id={id} formId={formId} />
           )}
           {fieldInfo.value === "date" && (
-            <DateFieldSetting hide={hide} id={id} />
+            <DateFieldSetting hide={hide} id={id} formId={formId} />
           )}
           {fieldInfo.value === "checkbox" && (
-            <CheckBoxFieldSetting hide={hide} id={id} />
+            <CheckBoxFieldSetting hide={hide} id={id} formId={formId} />
           )}
           {fieldInfo.value === "select" && (
-            <SelectFieldSetting hide={hide} id={id} />
+            <SelectFieldSetting hide={hide} id={id} formId={formId} />
           )}
           {fieldInfo.value === "heading" && (
-            <HeadingFieldSetting hide={hide} id={id} />
+            <HeadingFieldSetting hide={hide} id={id} formId={formId} />
           )}
           {fieldInfo.value === "paragraph" && (
-            <ParagraphFieldSetting hide={hide} id={id} />
+            <ParagraphFieldSetting hide={hide} id={id} formId={formId} />
           )}
           {fieldInfo.value === "divider" && (
-            <DividerFieldSetting hide={hide} id={id} />
+            <DividerFieldSetting hide={hide} id={id} formId={formId} />
           )}
           {fieldInfo.value === "list" && (
-            <ListFieldSetting hide={hide} id={id} />
+            <ListFieldSetting hide={hide} id={id} formId={formId} />
           )}
         </div>
       </PrimaryCard>

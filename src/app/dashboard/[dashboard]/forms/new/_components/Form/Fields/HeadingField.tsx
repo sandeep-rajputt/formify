@@ -8,6 +8,7 @@ import { HiOutlineTrash } from "react-icons/hi2";
 import { useState } from "react";
 import { useAppDispatch } from "@/hooks/reduxToolkit";
 import { pushDown, pullUp, deleteField } from "@/Store/slice/formSlice";
+import { FormId } from "@/types/form-types";
 
 type HeadingFieldProps = {
   label: string;
@@ -16,6 +17,7 @@ type HeadingFieldProps = {
   index: number;
   totalFields: number;
   setFieldSetting: () => void;
+  formId: FormId;
 };
 
 export function HeadingField({
@@ -25,6 +27,7 @@ export function HeadingField({
   index,
   totalFields,
   setFieldSetting,
+  formId,
 }: HeadingFieldProps) {
   const dispatch = useAppDispatch();
   const [showOptions, setShowOptions] = useState<boolean>(false);
@@ -48,7 +51,7 @@ export function HeadingField({
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                dispatch(pullUp({ id, index }));
+                dispatch(pullUp({ id, index, formId }));
               }}
               className="p-1 cursor-pointer rounded-md hover:bg-light-fg-muted/10 dark:hover:bg-dark-fg-muted/10"
             >
@@ -60,7 +63,7 @@ export function HeadingField({
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                dispatch(pushDown({ id, index }));
+                dispatch(pushDown({ id, index, formId }));
               }}
               className="p-1 cursor-pointer rounded-md hover:bg-light-fg-muted/10 dark:hover:bg-dark-fg-muted/10"
             >
@@ -78,7 +81,7 @@ export function HeadingField({
           <button
             onClick={(e) => {
               e.stopPropagation();
-              dispatch(deleteField(id));
+              dispatch(deleteField({ id, formId }));
             }}
             className="p-1 cursor-pointer rounded-md hover:bg-red-500/10 text-red-500"
           >

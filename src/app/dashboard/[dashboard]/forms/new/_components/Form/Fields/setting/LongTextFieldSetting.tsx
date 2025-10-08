@@ -9,18 +9,19 @@ import PrimarySquareButton from "@/component/common/PrimarySquareButton";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { longTextInputSchema } from "@/schema/formSchema";
 import { updateLongTextField } from "@/Store/slice/formSlice";
-import { LongTextInputField } from "@/types/form-types";
+import { FormId, LongTextInputField } from "@/types/form-types";
 interface LongTextFieldSettingProps {
   hide: () => void;
   id: string;
+  formId: FormId;
 }
 
-function LongTextFieldSetting({ hide, id }: LongTextFieldSettingProps) {
+function LongTextFieldSetting({ hide, id, formId }: LongTextFieldSettingProps) {
   const dispatch = useAppDispatch();
   const field = useAppSelector((state) =>
-    state.form.fields.find(
-      (field) => field.id === id && field.value === "long-text"
-    )
+    state.form
+      .find((form) => form.id === formId)
+      ?.fields.find((field) => field.id === id)
   ) as LongTextInputField;
 
   const {
@@ -50,7 +51,7 @@ function LongTextFieldSetting({ hide, id }: LongTextFieldSettingProps) {
   }
 
   function onSubmit(data: LongTextInputField) {
-    dispatch(updateLongTextField(data));
+    dispatch(updateLongTextField({ data, formId }));
     hide();
   }
 
