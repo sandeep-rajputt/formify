@@ -7,7 +7,6 @@ import { tivoraAiResponseSchema } from "@/schema/formSchema";
 import updateIdInResponse from "@/utils/updateIdInResponse";
 
 async function runGemini(
-  prompt: string,
   chats: Chats,
   data: { fields: FormFields[]; setting: FormSetting }
 ) {
@@ -51,10 +50,13 @@ IMPORTANT: Respond **only with valid JSON**, using double quotes for all keys an
   let finalResponse = "";
 
   try {
+    // Limit to last 6 chats only
+    const limitedChats = chats.slice(-6);
+
     const stream = await ai.models.generateContentStream({
       model,
       config,
-      contents: chats,
+      contents: limitedChats,
     });
 
     for await (const chunk of stream) {

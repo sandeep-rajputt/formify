@@ -149,11 +149,8 @@ function TivoraContainer({
 
     setValue("");
     setSendBtn(false);
-
     dispatch(addUserChat({ text: trimmed, formId: id }));
-
     const response: TivoraAiResponse = await runGemini(
-      trimmed,
       [...form.conversation, { role: "user", parts: [{ text: trimmed }] }],
       { fields: form.fields, setting: form.setting }
     );
