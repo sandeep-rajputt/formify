@@ -3,7 +3,6 @@ import { SessionProvider } from "next-auth/react";
 import { Provider } from "react-redux";
 import store from "@/Store/store";
 import { useEffect } from "react";
-import HandleSidebar from "@/component/HandleSidebar";
 
 type ThemeMode = "light" | "dark" | "system";
 
@@ -34,9 +33,7 @@ function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <SessionProvider>
-      <Provider store={store}>
-        <HandleSidebar>{children}</HandleSidebar>
-      </Provider>
+      <Provider store={store}>{children}</Provider>
     </SessionProvider>
   );
 }

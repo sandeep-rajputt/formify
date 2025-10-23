@@ -1,5 +1,6 @@
 import z from "zod";
 import isValidRegex from "@/utils/isValidRegex";
+import mongoose from "mongoose";
 
 const textInputFieldSchema = z.object({
   name: z.literal("Text Input"),
@@ -462,7 +463,9 @@ export const conversationSchema = chatsSchema;
 // formFieldInitialState
 export const FormSchema = z.object({
   id: formIdSchema,
-  fields: z.array(formFieldsSchema),
+  fields: z.array(formFieldsSchema).max(50, {
+    message: "Form can't have more than 50 fields",
+  }),
   setting: formSettingSchema,
   conversation: conversationSchema,
 });
@@ -533,4 +536,18 @@ export const tivoraAiResponseSystemSchema = z
 export const tivoraAiResponseSchema = z.object({
   system: tivoraAiResponseSystemSchema,
   userMessage: z.string(),
+});
+
+export const IFormSchema = z.object({
+  owner: z.instanceof(mongoose.Types.ObjectId),
+  formId: z.string(),
+  title: z.string(),
+  description: z.string().optional(),
+  theme: z.enum(["light", "dark", "system"]),
+  fields: z.array(formFieldsSchema),
+  status: z.enum(["draft", "published"]),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+  submissionsCount: z.number(),
+  views: z.number(),
 });

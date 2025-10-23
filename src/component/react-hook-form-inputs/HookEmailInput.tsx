@@ -2,33 +2,29 @@ import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import { TbInfoTriangle } from "react-icons/tb";
 import { UseFormRegisterReturn } from "react-hook-form";
 
-interface HookTextAreaInputProps {
+interface HookEmailInputProps {
   register: UseFormRegisterReturn;
   label: string;
   error?: string;
-  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   defaultValue?: string;
   required?: boolean;
   placeholder?: string;
-  rows?: number;
   message?: string;
 }
 
-function HookTextAreaInput({
+function HookEmailInput({
   register,
   label,
   error,
   defaultValue,
   onChange,
   required = false,
-  placeholder = "",
-  rows = 3,
+  placeholder = "Enter your email",
   message,
-}: HookTextAreaInputProps) {
-  function handleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    // Call the register's onChange first
+}: HookEmailInputProps) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     register.onChange(e);
-    // Then call the custom onChange if provided
     if (onChange) {
       onChange(e);
     }
@@ -78,18 +74,18 @@ function HookTextAreaInput({
           </p>
         )}
       </div>
-      <textarea
+      <input
         name={register.name}
         ref={register.ref}
         onBlur={register.onBlur}
         placeholder={placeholder}
         onChange={handleChange}
-        rows={rows}
-        className="border rounded-md border-light-fg-muted/20 dark:border-dark-fg-muted/20 focus:outline-none p-2 text-light-fg/95 dark:text-dark-fg/95 text-sm resize-vertical bg-transparent"
+        type="email"
+        className="border rounded-md border-light-fg-muted/20 dark:border-dark-fg-muted/20 focus:outline-none h-9 px-2 text-light-fg/95 dark:text-dark-fg/95 text-sm bg-transparent"
       />
       {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
     </div>
   );
 }
 
-export default HookTextAreaInput;
+export default HookEmailInput;

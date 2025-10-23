@@ -6,7 +6,7 @@ import HookTextInput from "@/component/react-hook-form-inputs/HookTextInput";
 import HookTextAreaInput from "@/component/react-hook-form-inputs/HookTextAreaInput";
 import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import type { FormId, FormSetting, Form } from "@/types/form-types";
+import type { FormId, FormSetting } from "@/types/form-types";
 import { formSettingSchema } from "@/schema/formSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAppSelector, useAppDispatch } from "@/hooks/reduxToolkit";

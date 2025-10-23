@@ -3,6 +3,20 @@
 import { Controller, Control, FieldValues, Path } from "react-hook-form";
 import DatePicker from "@/app/dashboard/[dashboard]/_components/common/DatePicker";
 
+// Helper function to format date to local YYYY-MM-DD string without timezone issues
+function formatDateToLocal(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+// Helper function to parse YYYY-MM-DD string to local Date without timezone issues
+function parseDateFromLocal(dateString: string): Date {
+  const [year, month, day] = dateString.split("-").map(Number);
+  return new Date(year, month - 1, day); // month is 0-indexed in Date constructor
+}
+
 interface HookDatePickerProps<T extends FieldValues = FieldValues> {
   name: Path<T>;
   control: Control<T>;
@@ -55,7 +69,18 @@ function HookDatePicker<T extends FieldValues = FieldValues>({
             value={
               field.value && field.value !== undefined
                 ? typeof field.value === "string"
-                  ? new Date(field.value)
+                  ? parseDateFromLocal(field.value)
+                  : field.value &&
+                    typeof field.value === "object" &&
+                    "start" in field.value
+                  ? {
+                      start: field.value.start
+                        ? parseDateFromLocal(field.value.start)
+                        : null,
+                      end: field.value.end
+                        ? parseDateFromLocal(field.value.end)
+                        : null,
+                    }
                   : field.value
                 : undefined
             }
@@ -66,18 +91,16 @@ function HookDatePicker<T extends FieldValues = FieldValues>({
                   typeof value === "object" &&
                   "start" in value
                 ) {
-                  // Handle range mode - convert dates to ISO strings
+                  // Handle range mode - convert dates to local date strings
                   field.onChange({
                     start: value.start
-                      ? value.start.toISOString().split("T")[0]
+                      ? formatDateToLocal(value.start)
                       : undefined,
-                    end: value.end
-                      ? value.end.toISOString().split("T")[0]
-                      : undefined,
+                    end: value.end ? formatDateToLocal(value.end) : undefined,
                   });
                 } else if (value instanceof Date) {
-                  // Handle single mode - convert date to ISO string
-                  field.onChange(value.toISOString().split("T")[0]);
+                  // Handle single mode - convert date to local date string
+                  field.onChange(formatDateToLocal(value));
                 }
               } else {
                 field.onChange(undefined);
@@ -93,7 +116,13 @@ function HookDatePicker<T extends FieldValues = FieldValues>({
         )}
       />
 
-      {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+      {error && (
+        <p className="text-red-500 text-sm mt-1">
+          {error === "Invalid input: expected string, received undefined"
+            ? "Please select a date"
+            : error}
+        </p>
+      )}
     </div>
   );
 }

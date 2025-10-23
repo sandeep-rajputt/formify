@@ -101,7 +101,13 @@ function HookSelectInput<T extends FieldValues = FieldValues>({
         }}
       />
 
-      {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+      {error && (
+        <p className="text-red-500 text-sm mt-1">
+          {error === "Invalid input: expected string, received undefined"
+            ? "Please select an option"
+            : error}
+        </p>
+      )}
     </div>
   );
 }

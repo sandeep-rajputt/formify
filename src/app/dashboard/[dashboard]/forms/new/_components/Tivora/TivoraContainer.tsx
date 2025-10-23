@@ -9,7 +9,7 @@ import SendIcon from "@/component/svg/SendIcon";
 import LoaderIcon from "@/component/svg/LoaderIcon";
 import TivoraMessage from "@/app/dashboard/[dashboard]/forms/new/_components/Tivora/TivoraMessage";
 import TivoraDefaultScreen from "@/app/dashboard/[dashboard]/forms/new/_components/Tivora/TivoraDefaultScreen";
-import TivoraUserMessage from "@/app/dashboard/[dashboard]/forms/new/_components/Tivora/TivoraMessage";
+import TivoraUserMessage from "@/app/dashboard/[dashboard]/forms/new/_components/Tivora/TivoraUserMessage";
 import NewPortal from "@/component/common/NewPortal";
 import ConfirmationModal from "@/component/common/ConfirmationModal";
 import TivoraFeedback from "@/app/dashboard/[dashboard]/forms/new/_components/Tivora/TivoraFeedback";
@@ -212,7 +212,7 @@ function TivoraContainer({
           ref={conversationRef}
           className="overflow-y-scroll h-full scrollbar px-1"
         >
-          <TivoraUserMessage message={parsedMessage.userMessage} />
+          <TivoraMessage message={parsedMessage.userMessage} />
           {form.conversation.length === 1 && (
             <TivoraDefaultScreen runQuery={runQuery} />
           )}

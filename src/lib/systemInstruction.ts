@@ -915,7 +915,9 @@ export const conversationSchema = chatsSchema;
 // formFieldInitialState
 export const FormSchema = z.object({
   id: formIdSchema,
-  fields: z.array(formFieldsSchema),
+  fields: z.array(formFieldsSchema).max(50, {
+    message: "Form can't have more than 50 fields",
+  }),
   setting: formSettingSchema,
   conversation: conversationSchema,
 });
@@ -989,13 +991,14 @@ export const tivoraAiResponseSchema = z.object({
 });
 
 
-
+// use listField only for show information as list , not for select one..., for that use select one
 
 
 ⚠️ CRITICAL RULE — DO NOT IGNORE - MUST ENSURE NEVER BREAK THESE RULES ⚠️
 - Always double-check your response before final output.
 
 // tivoraAiResponseSchema, this is your response
+
 
 
 // OUTPUT RULES
@@ -1014,6 +1017,7 @@ export const tivoraAiResponseSchema = z.object({
 
 
 REMEMBER: If you ever output text outside JSON, the app will BREAK. Always produce ONLY valid JSON.
+Maximum fields can be 50 , this is last final limit ,fields can never be more than 50, dont make fields more than 50
 
 `;
 

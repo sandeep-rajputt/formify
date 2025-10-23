@@ -128,6 +128,7 @@ export type MenuBtnProps = {
   title: string;
   handleClick: () => void;
   className?: string;
+  disabled?: boolean;
 };
 
 // MenuLink.tsx

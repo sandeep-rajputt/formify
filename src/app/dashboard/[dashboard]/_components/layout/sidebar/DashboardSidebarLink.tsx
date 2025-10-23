@@ -7,6 +7,9 @@ import SubmissionsSVG from "@/component/svg/SubmissionsSVG";
 import SettingSVG from "@/component/svg/SettingSVG";
 import FormsSVG from "@/component/svg/FormsSVG";
 import TemplatesSVG from "@/component/svg/TemplatesSVG";
+import { useIsLargeScreen } from "@/app/dashboard/[dashboard]/_hooks/useIsLargeScreen";
+import { useAppDispatch } from "@/hooks/reduxToolkit";
+import { closeSidebar } from "@/Store/slice/dashboardSidebarSlice";
 
 type Item = {
   name: string;
@@ -16,6 +19,14 @@ type Item = {
 
 function DashboardSidebarLink({ item }: { item: Item }): ReactNode {
   const pathname = usePathname();
+  const isLargeScreen = useIsLargeScreen();
+  const dispatch = useAppDispatch();
+
+  function handleLinkClick() {
+    if (!isLargeScreen) {
+      dispatch(closeSidebar());
+    }
+  }
 
   return (
     <li className={`w-full relative`}>
@@ -26,6 +37,9 @@ function DashboardSidebarLink({ item }: { item: Item }): ReactNode {
         }`}
       >
         <Link
+          onClick={() => {
+            handleLinkClick();
+          }}
           href={`${item.link}`}
           className={`w-full rounded-md inline-block hover:bg-light-surface-alt dark:hover:bg-dark-surface-alt transition-colors duration-100 ${
             item.link === pathname &&

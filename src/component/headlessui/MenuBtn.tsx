@@ -10,11 +10,13 @@ function MenuBtn({
   title,
   handleClick,
   className = "",
+  disabled = false,
 }: MenuBtnProps) {
   return (
     <MenuItem>
       <button
         type="button"
+        disabled={disabled}
         title={title}
         aria-label={title}
         onClick={handleClick}

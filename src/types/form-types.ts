@@ -22,7 +22,9 @@ import {
   chatsSchema,
   tivoraAiResponseSchema,
   tivoraAiResponseSystemSchema,
+  IFormSchema,
 } from "@/schema/formSchema";
+
 import z from "zod";
 
 // for addFormField.tsx
@@ -93,3 +95,16 @@ export type TivoraAiResponse = z.infer<typeof tivoraAiResponseSchema>;
 export type tivoraAiResponseSystem = z.infer<
   typeof tivoraAiResponseSystemSchema
 >;
+
+// IFormSchema
+export type IForm = z.infer<typeof IFormSchema>;
+// Simple submission types
+import {
+  submissionSchema,
+  createSubmissionSchema,
+  getSubmissionsSchema,
+} from "@/schema/submissionSchema";
+
+export type Submission = z.infer<typeof submissionSchema>;
+export type CreateSubmission = z.infer<typeof createSubmissionSchema>;
+export type GetSubmissions = z.infer<typeof getSubmissionsSchema>;

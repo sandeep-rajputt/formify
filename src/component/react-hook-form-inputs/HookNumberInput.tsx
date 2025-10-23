@@ -2,19 +2,20 @@ import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import { TbInfoTriangle } from "react-icons/tb";
 import { UseFormRegisterReturn } from "react-hook-form";
 
-interface HookTextAreaInputProps {
+interface HookNumberInputProps {
   register: UseFormRegisterReturn;
   label: string;
   error?: string;
-  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  defaultValue?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  defaultValue?: number;
   required?: boolean;
   placeholder?: string;
-  rows?: number;
   message?: string;
+  min?: number;
+  max?: number;
 }
 
-function HookTextAreaInput({
+function HookNumberInput({
   register,
   label,
   error,
@@ -22,13 +23,12 @@ function HookTextAreaInput({
   onChange,
   required = false,
   placeholder = "",
-  rows = 3,
   message,
-}: HookTextAreaInputProps) {
-  function handleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    // Call the register's onChange first
+  min,
+  max,
+}: HookNumberInputProps) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     register.onChange(e);
-    // Then call the custom onChange if provided
     if (onChange) {
       onChange(e);
     }
@@ -42,7 +42,7 @@ function HookTextAreaInput({
             {label}{" "}
             {required && <span className="text-red-500 text-sm">*</span>}
           </label>
-          {defaultValue && (
+          {defaultValue !== undefined && (
             <Popover>
               {({ open }) => {
                 return (
@@ -78,18 +78,20 @@ function HookTextAreaInput({
           </p>
         )}
       </div>
-      <textarea
+      <input
         name={register.name}
         ref={register.ref}
         onBlur={register.onBlur}
         placeholder={placeholder}
         onChange={handleChange}
-        rows={rows}
-        className="border rounded-md border-light-fg-muted/20 dark:border-dark-fg-muted/20 focus:outline-none p-2 text-light-fg/95 dark:text-dark-fg/95 text-sm resize-vertical bg-transparent"
+        type="number"
+        min={min}
+        max={max}
+        className="border rounded-md border-light-fg-muted/20 dark:border-dark-fg-muted/20 focus:outline-none h-9 px-2 text-light-fg/95 dark:text-dark-fg/95 text-sm bg-transparent"
       />
       {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
     </div>
   );
 }
 
-export default HookTextAreaInput;
+export default HookNumberInput;

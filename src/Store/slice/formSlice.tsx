@@ -44,6 +44,28 @@ const formSlice = createSlice({
   name: "form",
   initialState,
   reducers: {
+    // reset form
+    resetForm(state) {
+      const form = state.find((f) => f.id === "new-form");
+      if (form) {
+        form.fields = [];
+        form.setting = {
+          formName: "Untitled Form",
+          formDescription: "",
+          theme: "system",
+        };
+        form.conversation = [
+          {
+            role: "model",
+            parts: [
+              {
+                text: `{ "userMessage": "👋 Hello! I’m Tivora, your AI assistant. Need help building your form?"}`,
+              },
+            ],
+          },
+        ];
+      }
+    },
     // for  form
     updateForm(
       state,
@@ -87,7 +109,13 @@ const formSlice = createSlice({
     // for addField
     addField(state: Forms, action: AddFieldAction) {
       const form = state.find((f) => f.id === action.payload.formId);
-      if (form) form.fields.push(action.payload.data);
+      if (form) {
+        if (action.payload.index === -1) {
+          form.fields.push(action.payload.data);
+        } else {
+          form.fields.splice(action.payload.index, 0, action.payload.data);
+        }
+      }
     },
 
     //  for remove
@@ -385,6 +413,7 @@ export const {
   moveField,
   addFieldAfter,
   addFieldBefore,
+  resetForm,
 } = formSlice.actions;
 
 export default formSlice.reducer;

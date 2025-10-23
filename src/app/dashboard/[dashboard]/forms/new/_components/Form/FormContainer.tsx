@@ -3,6 +3,7 @@ import Separator from "@/component/headlessui/Separator";
 import AddFormField from "@/app/dashboard/[dashboard]/forms/new/_components/Form/AddFormField";
 import { memo, useRef, useState, useEffect, Fragment } from "react";
 import { useAppSelector } from "@/hooks/reduxToolkit";
+import Link from "next/link";
 import FormDefaultScreen from "@/app/dashboard/[dashboard]/forms/new/_components/Form/FormDefaultScreen";
 import FormHeader from "@/app/dashboard/[dashboard]/forms/new/_components/Form/FormHeader";
 import NewPortal from "@/component/common/NewPortal";
@@ -15,6 +16,8 @@ import { NumberField } from "@/app/dashboard/[dashboard]/forms/new/_components/F
 import { FormFieldOptions, FormId } from "@/types/form-types";
 import { DateField } from "@/app/dashboard/[dashboard]/forms/new/_components/Form/Fields/DateField";
 import { FormSchema } from "@/schema/formSchema";
+import { resetForm } from "@/Store/slice/formSlice";
+import { useAppDispatch } from "@/hooks/reduxToolkit";
 import { CheckBoxField } from "@/app/dashboard/[dashboard]/forms/new/_components/Form/Fields/CheckBoxField";
 import { SelectField } from "@/app/dashboard/[dashboard]/forms/new/_components/Form/Fields/SelectField";
 import { HeadingField } from "@/app/dashboard/[dashboard]/forms/new/_components/Form/Fields/HeadingField";
@@ -24,13 +27,18 @@ import { ListField } from "@/app/dashboard/[dashboard]/forms/new/_components/For
 import z from "zod";
 
 function FormContainer({ formId }: { formId: FormId }) {
-  const { fields, setting } = useAppSelector((state) => {
+  const dispatch = useAppDispatch();
+  const { fields, setting, conversation } = useAppSelector((state) => {
     const form = state.form.find((form) => form.id === formId);
-    return form ? form : { fields: undefined, setting: undefined };
+    return form
+      ? form
+      : { fields: undefined, setting: undefined, conversation: undefined };
   });
   const [disableScroll, setDisableScroll] = useState<boolean>(false);
   const [scrollbarTakesSpace, setScrollbarTakesSpace] =
     useState<boolean>(false);
+  const [isPublishing, setIsPublishing] = useState<boolean>(false);
+  const [isDrafting, setIsDrafting] = useState<boolean>(false);
   const [fieldSetting, setFieldSetting] = useState<{
     show: boolean;
     id: null | string;
@@ -39,6 +47,25 @@ function FormContainer({ formId }: { formId: FormId }) {
   const container = useRef<HTMLDivElement>(null);
   const [showFormSetting, setShowFormSetting] = useState<boolean>(false);
 
+  // Simple popup state for publish results
+  const [showPopup, setShowPopup] = useState<boolean>(false);
+  const [popupType, setPopupType] = useState<"success" | "error">("success");
+  const [popupMessage, setPopupMessage] = useState<string>("");
+  const [newFormId, setNewFormId] = useState<string>("");
+  const [copySuccess, setCopySuccess] = useState<boolean>(false);
+
+  // Copy link function
+  const copyFormLink = async () => {
+    const formUrl = `${window.location.origin}/f/${newFormId}`;
+    try {
+      await navigator.clipboard.writeText(formUrl);
+      setCopySuccess(true);
+      setTimeout(() => setCopySuccess(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy: ", err);
+    }
+  };
+
   useEffect(() => {
     if (container.current) {
       const { offsetWidth, clientWidth } = container.current;
@@ -46,18 +73,72 @@ function FormContainer({ formId }: { formId: FormId }) {
     }
   }, []);
 
-  function handlePublish() {
-    const data = { fields, setting };
+  function handlePublish(status: "draft" | "published") {
+    const data = { fields, setting, id: formId, conversation };
+    if (status === "draft") {
+      setIsDrafting(true);
+    } else {
+      setIsPublishing(true);
+    }
     try {
       FormSchema.parse(data);
-      console.log("Form data is valid:", data);
+      const endpoint =
+        formId === "new-form"
+          ? "/api/forms/add-new-form"
+          : `/api/forms/${formId}/update`;
+      const APP_URL = process.env.NEXT_PUBLIC_APP_URL as string;
+      const API_URL = APP_URL + endpoint;
+      fetch(API_URL, {
+        method: formId === "new-form" ? "POST" : "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ formData: data, status }),
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          if (result.id) {
+            setNewFormId(result.id);
+          }
+          if (result.status === 200) {
+            setPopupType("success");
+            setPopupMessage(
+              status === "published"
+                ? "Form published successfully! 🎉"
+                : "Form saved as draft! 📝"
+            );
+          } else {
+            setPopupType("error");
+            setPopupMessage("Something went wrong. Please try again.");
+          }
+          setShowPopup(true);
+          if (formId === "new-form") {
+            dispatch(resetForm());
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          setPopupType("error");
+          setPopupMessage("Failed to save form. Please check your connection.");
+          setShowPopup(true);
+        })
+        .finally(() => {
+          setIsPublishing(false);
+          setIsDrafting(false);
+        });
     } catch (error) {
       if (error instanceof z.ZodError) {
-        console.error(error);
-        alert("Form data is invalid. Please check the fields.");
+        setPopupType("error");
+        setPopupMessage("Form data is invalid. Please check the fields.");
+        setShowPopup(true);
       } else {
         console.error("An unexpected error occurred during validation:", error);
+        setPopupType("error");
+        setPopupMessage("Something went wrong. Please try again.");
+        setShowPopup(true);
       }
+      setIsPublishing(false);
+      setIsDrafting(false);
     }
   }
 
@@ -72,8 +153,16 @@ function FormContainer({ formId }: { formId: FormId }) {
           <div>
             <FormHeader
               totalFields={fields.length}
-              onPublish={() => handlePublish()}
-              onDraft={() => {}}
+              isPublishing={isPublishing}
+              isDrafting={isDrafting}
+              onPublish={() => {
+                setIsPublishing(true);
+                handlePublish("published");
+              }}
+              onDraft={() => {
+                setIsDrafting(true);
+                handlePublish("draft");
+              }}
               onEdit={() => setShowFormSetting(true)}
               onPreview={() => {}}
             />
@@ -120,7 +209,7 @@ function FormContainer({ formId }: { formId: FormId }) {
             />
           ) : (
             <div className="flex flex-col gap-2 my-10">
-              {fields.length <= 50 && (
+              {fields.length < 50 && (
                 <AddFormField
                   disableScroll={() => setDisableScroll(true)}
                   enableScroll={() => setDisableScroll(false)}
@@ -155,7 +244,7 @@ function FormContainer({ formId }: { formId: FormId }) {
                           formId={formId}
                         />
 
-                        {fields.length <= 50 && (
+                        {fields.length < 50 && (
                           <AddFormField
                             disableScroll={() => setDisableScroll(true)}
                             enableScroll={() => setDisableScroll(false)}
@@ -190,7 +279,7 @@ function FormContainer({ formId }: { formId: FormId }) {
                           formId={formId}
                         />
 
-                        {fields.length <= 50 && (
+                        {fields.length < 50 && (
                           <AddFormField
                             disableScroll={() => setDisableScroll(true)}
                             enableScroll={() => setDisableScroll(false)}
@@ -226,7 +315,7 @@ function FormContainer({ formId }: { formId: FormId }) {
                           max={item.max}
                           formId={formId}
                         />
-                        {fields.length <= 50 && (
+                        {fields.length < 50 && (
                           <AddFormField
                             disableScroll={() => setDisableScroll(true)}
                             enableScroll={() => setDisableScroll(false)}
@@ -260,7 +349,7 @@ function FormContainer({ formId }: { formId: FormId }) {
                           description={item.description}
                           formId={formId}
                         />
-                        {fields.length <= 50 && (
+                        {fields.length < 50 && (
                           <AddFormField
                             disableScroll={() => setDisableScroll(true)}
                             enableScroll={() => setDisableScroll(false)}
@@ -298,7 +387,7 @@ function FormContainer({ formId }: { formId: FormId }) {
                           weekStartsOn={item.weekStartsOn}
                           formId={formId}
                         />
-                        {fields.length <= 50 && (
+                        {fields.length < 50 && (
                           <AddFormField
                             disableScroll={() => setDisableScroll(true)}
                             enableScroll={() => setDisableScroll(false)}
@@ -331,7 +420,7 @@ function FormContainer({ formId }: { formId: FormId }) {
                           description={item.description}
                           formId={formId}
                         />
-                        {fields.length <= 50 && (
+                        {fields.length < 50 && (
                           <AddFormField
                             disableScroll={() => setDisableScroll(true)}
                             enableScroll={() => setDisableScroll(false)}
@@ -365,7 +454,7 @@ function FormContainer({ formId }: { formId: FormId }) {
                           options={item.options}
                           formId={formId}
                         />
-                        {fields.length <= 50 && (
+                        {fields.length < 50 && (
                           <AddFormField
                             disableScroll={() => setDisableScroll(true)}
                             enableScroll={() => setDisableScroll(false)}
@@ -397,7 +486,7 @@ function FormContainer({ formId }: { formId: FormId }) {
                           level={item.level}
                           formId={formId}
                         />
-                        {fields.length <= 50 && (
+                        {fields.length < 50 && (
                           <AddFormField
                             disableScroll={() => setDisableScroll(true)}
                             enableScroll={() => setDisableScroll(false)}
@@ -428,7 +517,7 @@ function FormContainer({ formId }: { formId: FormId }) {
                           content={item.content}
                           formId={formId}
                         />
-                        {fields.length <= 50 && (
+                        {fields.length < 50 && (
                           <AddFormField
                             disableScroll={() => setDisableScroll(true)}
                             enableScroll={() => setDisableScroll(false)}
@@ -461,7 +550,7 @@ function FormContainer({ formId }: { formId: FormId }) {
                           spaceBottom={item.spaceBottom}
                           formId={formId}
                         />
-                        {fields.length <= 50 && (
+                        {fields.length < 50 && (
                           <AddFormField
                             disableScroll={() => setDisableScroll(true)}
                             enableScroll={() => setDisableScroll(false)}
@@ -494,7 +583,7 @@ function FormContainer({ formId }: { formId: FormId }) {
                           ordered={item.ordered}
                           formId={formId}
                         />
-                        {fields.length <= 50 && (
+                        {fields.length < 50 && (
                           <AddFormField
                             disableScroll={() => setDisableScroll(true)}
                             enableScroll={() => setDisableScroll(false)}
@@ -529,6 +618,154 @@ function FormContainer({ formId }: { formId: FormId }) {
               }
               fieldInfo={fieldSetting.info}
             />
+          </NewPortal>
+        )}
+
+        {/* Enhanced Popup for Publish Results */}
+        {showPopup && (
+          <NewPortal>
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+              <div className="bg-light-surface dark:bg-dark-surface rounded-xl p-6 max-w-md w-full mx-4 shadow-2xl">
+                {/* Header with Icon */}
+                <div className="text-center mb-6">
+                  {popupType === "success" ? (
+                    <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <svg
+                        className="w-8 h-8 text-green-600 dark:text-green-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    </div>
+                  ) : (
+                    <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <svg
+                        className="w-8 h-8 text-red-600 dark:text-red-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </div>
+                  )}
+
+                  <h3 className="text-xl font-semibold text-light-fg dark:text-dark-fg mb-2">
+                    {popupType === "success" ? "Success!" : "Error"}
+                  </h3>
+                  <p className="text-light-fg-muted dark:text-dark-fg-muted">
+                    {popupMessage}
+                  </p>
+                </div>
+
+                {/* Success Actions */}
+                {popupType === "success" && newFormId && (
+                  <div className="space-y-3 mb-6">
+                    {/* Form Link Display */}
+                    <div className="bg-light-surface-alt dark:bg-dark-surface-alt rounded-lg p-3">
+                      <p className="text-xs text-light-fg-muted dark:text-dark-fg-muted mb-2">
+                        Form Link:
+                      </p>
+                      <p className="text-sm text-light-fg dark:text-dark-fg font-mono break-all">
+                        {`${
+                          typeof window !== "undefined"
+                            ? window.location.origin
+                            : ""
+                        }/f/${newFormId}`}
+                      </p>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="grid grid-cols-2 gap-3">
+                      <button
+                        onClick={copyFormLink}
+                        className="flex items-center justify-center gap-2 py-2 px-4 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-light-fg dark:text-dark-fg rounded-lg transition-colors text-sm"
+                      >
+                        {copySuccess ? (
+                          <>
+                            <svg
+                              className="w-4 h-4 text-green-600"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M5 13l4 4L19 7"
+                              />
+                            </svg>
+                            Copied!
+                          </>
+                        ) : (
+                          <>
+                            <svg
+                              className="w-4 h-4"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                              />
+                            </svg>
+                            Copy Link
+                          </>
+                        )}
+                      </button>
+
+                      <Link
+                        href={`/f/${newFormId}`}
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-2 py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors text-sm"
+                      >
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                          />
+                        </svg>
+                        View Form
+                      </Link>
+                    </div>
+                  </div>
+                )}
+
+                {/* Close Button */}
+                <button
+                  onClick={() => {
+                    setShowPopup(false);
+                    setCopySuccess(false);
+                  }}
+                  className="w-full py-3 px-4 bg-light-surface-alt hover:bg-light-fg/10 dark:bg-dark-surface-alt dark:hover:bg-dark-fg/10 text-light-fg dark:text-dark-fg rounded-lg transition-colors font-medium"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
           </NewPortal>
         )}
       </div>

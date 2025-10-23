@@ -52,7 +52,7 @@ function FormHeader({
               handleClick={onPreview}
               className="!font-normal !gap-2 px-2 py-1 text-xs"
             >
-              {isDrafting ? <SpinnerIcon /> : <PreviewIcon />}
+              <PreviewIcon />
               <span>Preview</span>
             </SecondarySquareButton>
 
@@ -62,7 +62,11 @@ function FormHeader({
               title="Publish Form"
               className="!font-normal !gap-2  text-xs xs:flex hidden"
             >
-              {isPublishing ? <SpinnerIcon /> : <SendIcon size={14} />}
+              {isPublishing ? (
+                <SpinnerIcon size={14} />
+              ) : (
+                <SendIcon size={14} />
+              )}
               <span>Publish</span>
             </PrimarySquareButton>
 
@@ -81,8 +85,9 @@ function FormHeader({
                 key={"Draft Form"}
                 title={"Draft Form"}
                 className=""
+                disabled={isDrafting || isPublishing}
               >
-                {isDrafting ? <SpinnerIcon /> : <DraftDocumentIcon />}
+                {isDrafting ? <SpinnerIcon size={18} /> : <DraftDocumentIcon />}
 
                 <span>Draft</span>
               </MenuBtn>
@@ -93,9 +98,14 @@ function FormHeader({
                   handleClick={() => {}}
                   key={"Publish Form"}
                   title={"Publish Form"}
+                  disabled={isPublishing || isDrafting}
                   className="!bg-brand-primary !hover:bg-brand-primary !text-white  data-focus:bg-brand-primary font-semibold "
                 >
-                  {isPublishing ? <SpinnerIcon /> : <SendIcon size={20} />}
+                  {isPublishing ? (
+                    <SpinnerIcon size={14} />
+                  ) : (
+                    <SendIcon size={20} />
+                  )}
                   <span>Publish Form</span>
                 </MenuBtn>
               </div>

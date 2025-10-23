@@ -59,14 +59,15 @@ function NewFormPageStructure({ chatFormId }: { chatFormId: FormId }) {
         <DynamicTivoraContainer id={chatFormId} />
       </div>
       <div className="md:hidden flex">
-        <div className="fixed bottom-3 right-5 z-50 flex items-center justify-center rounded-full overflow-hidden">
+        <div className="fixed bottom-3 right-5 z-50 flex items-center justify-center rounded-md">
           <button
-            className="cursor-pointer bg-transparent"
+            className="cursor-pointer flex gap-1 items-center justify-center bg-light-bg dark:bg-dark-bg px-2 py-1 rounded-full border border-light-fg-muted/20 dark:border-dark-fg-muted/20"
             onClick={() => {
               setShowTivora((prev) => !prev);
             }}
           >
-            <TivoraIcon size={35} />
+            <TivoraIcon size={25} />
+            <span className=" font-semibold tracking-tightest">ASK AI</span>
           </button>
           <div className="md:hidden block">
             {showTivora && (

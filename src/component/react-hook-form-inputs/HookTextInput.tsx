@@ -85,7 +85,7 @@ function HookTextInput({
         placeholder={placeholder}
         onChange={handleChange}
         type={type}
-        className="border rounded-md  border-light-fg-muted/20 dark:border-dark-fg-muted/20 focus:outline-none h-9 px-2 text-light-text/95 dark:text-dark-text/95 text-sm"
+        className="border rounded-md border-light-fg-muted/20 dark:border-dark-fg-muted/20 focus:outline-none h-9 px-2 text-light-fg/95 dark:text-dark-fg/95 text-sm bg-transparent"
       />
       {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
     </div>
