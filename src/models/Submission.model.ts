@@ -3,6 +3,7 @@ import mongoose, { Document, Schema, Model } from "mongoose";
 // Simple interface for a form submission
 export interface ISubmission extends Document {
   formId: string;
+  owner: string;
   submittedAt: Date;
   answers: Record<string, unknown>; // fieldId -> answer value
   submitterInfo?: {
@@ -17,6 +18,10 @@ export interface ISubmission extends Document {
 const submissionSchema: Schema<ISubmission> = new Schema(
   {
     formId: {
+      type: String,
+      required: true,
+    },
+    owner: {
       type: String,
       required: true,
     },

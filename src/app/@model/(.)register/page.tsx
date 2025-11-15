@@ -1,11 +1,11 @@
 "use client";
 import { memo, useEffect, useState } from "react";
-import PrimaryCard from "@/component/common/PrimaryCard";
 import GoogleAuthButton from "@/app/(public)/(auth)/_components/GoogleAuthButton";
 import GithubAuthButton from "@/app/(public)/(auth)/_components/GithubAuthButton";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
+import SimpleCard from "@/component/common/SimpleCard";
 
 function RegisterPage() {
   const router = useRouter();
@@ -40,13 +40,13 @@ function RegisterPage() {
     <div
       onClick={() => closeModel()}
       aria-hidden="true"
-      className=" flex items-center z-[100000] justify-center px-5 fixed top-0 left-0 w-screen h-screen !backdrop-blur-xs"
+      className=" flex items-center z-[100000] justify-center px-5 fixed top-0 left-0 w-screen h-screen !backdrop-blur-xs bg-light-fg/30 dark:bg-dark-bg/30"
     >
-      <PrimaryCard
+      <SimpleCard
         handleClick={(e) => {
           e.stopPropagation();
         }}
-        className="w-full max-w-md px-10 py-8  shadow-sm"
+        className="w-full max-w-md px-10 py-8  shadow-sm !backdrop-blur-3xl bg-light-bg/90 dark:bg-dark-surface/95"
       >
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold mb-2">Create your account</h1>
@@ -84,7 +84,7 @@ function RegisterPage() {
             </Link>
           </p>
         </div>
-      </PrimaryCard>
+      </SimpleCard>
     </div>
   );
 }

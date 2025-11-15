@@ -3,7 +3,6 @@ import connectDB from "@/lib/db";
 import { Form } from "@/models/Form.model";
 import { Submission } from "@/models/Submission.model";
 import { createSubmissionSchema } from "@/schema/submissionSchema";
-
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -47,6 +46,7 @@ export async function POST(
     // Create new submission
     const submission = new Submission({
       formId,
+      owner: form.owner.toString(),
       submittedAt: new Date(),
       answers: validatedData.answers,
       submitterInfo,
