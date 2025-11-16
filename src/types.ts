@@ -57,6 +57,7 @@ export type PrimaryLinkProps = {
   link: string;
   external?: boolean;
   title?: string;
+  newWindow?: boolean;
 };
 
 // SecondarySquareButton.tsx

@@ -463,9 +463,12 @@ export const conversationSchema = chatsSchema;
 // formFieldInitialState
 export const FormSchema = z.object({
   id: formIdSchema,
-  fields: z.array(formFieldsSchema).max(50, {
-    message: "Form can't have more than 50 fields",
-  }),
+  fields: z
+    .array(formFieldsSchema)
+    .max(50, {
+      message: "Form can't have more than 50 fields",
+    })
+    .min(2, { message: "Your form must have at least 2 fields" }),
   setting: formSettingSchema,
   conversation: conversationSchema,
 });

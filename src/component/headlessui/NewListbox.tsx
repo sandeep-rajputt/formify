@@ -1,8 +1,9 @@
 import React from "react";
 import { Listbox } from "@headlessui/react";
-type FilterOptions = {
+export type FilterOptions = {
   id: number;
   name: string;
+  value?: string;
 };
 
 function NewListbox({

@@ -1,26 +1,41 @@
 import { NextRequest, NextResponse } from "next/server";
-import { FormSchema } from "@/schema/formSchema";
+import { formFieldsSchema, formSettingSchema } from "@/schema/formSchema";
 import connectDB from "@/lib/db";
 import { Form } from "@/models/Form.model";
 import { v4 as uuidv4 } from "uuid";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { revalidateFormPages } from "@/utils/revalidation";
+import z from "zod";
+
+const BodySchema = z.object({
+  formData: z.object({
+    fields: z
+      .array(formFieldsSchema)
+      .max(50, {
+        message: "Form can't have more than 50 fields",
+      })
+      .min(2, { message: "Your form must have at least 2 fields" }),
+    setting: formSettingSchema,
+  }),
+  status: z.enum(["draft", "published"]),
+});
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { status, formData } = body;
-  const parsedBody = FormSchema.safeParse(formData);
+  const parsedBody = BodySchema.safeParse(body);
   if (!parsedBody.success) {
-    return NextResponse.json({ error: parsedBody.error });
+    return NextResponse.json({ error: parsedBody.error }, { status: 400 });
   }
+
+  const { status, formData } = parsedBody.data;
   const session = await getServerSession(authOptions);
   if (!session || !session.user) {
     return NextResponse.json({ status: 401, message: "Unauthorized" });
   }
   try {
     await connectDB();
-    const { fields, setting } = parsedBody.data;
+    const { fields, setting } = formData;
     const form = await Form.create({
       formId: uuidv4(),
       owner: session.user.id,

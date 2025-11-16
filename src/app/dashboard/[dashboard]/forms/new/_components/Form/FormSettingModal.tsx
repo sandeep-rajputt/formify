@@ -25,9 +25,9 @@ function FormSettingModal({ hide, formId }: FormSettingModalProps) {
   );
   const Box = useRef<HTMLDivElement>(null);
   const [defaultValues, setDefaultValues] = useState<FormSetting>({
-    formName: "Untitled Form",
-    formDescription: "",
-    theme: "light",
+    formName: formData?.setting.formName || "Untitled Form",
+    formDescription: formData?.setting.formDescription || "",
+    theme: formData?.setting.theme || "light",
   });
 
   const {

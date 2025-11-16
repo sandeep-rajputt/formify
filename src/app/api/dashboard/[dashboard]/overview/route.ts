@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
     // recent created forms
     const recentForms = await Form.find(
       { owner: userId },
-      "title formId status submissionsCount createdAt"
+      "title formId status submissionsCount views createdAt updatedAt description"
     )
       .sort({ createdAt: -1 })
       .limit(5)
@@ -40,7 +40,7 @@ export async function GET(req: NextRequest) {
     // forms submissions
     const formsSubmissions = await Form.find(
       { owner: userId },
-      "title submissionsCount"
+      "title formId submissionsCount status views createdAt updatedAt description"
     )
       .sort({ submissionsCount: -1 })
       .limit(5)

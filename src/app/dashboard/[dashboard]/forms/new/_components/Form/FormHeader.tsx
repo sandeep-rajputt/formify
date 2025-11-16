@@ -11,6 +11,7 @@ import PreviewIcon from "@/component/svg/PreviewIcon";
 import PrimarySquareButton from "@/component/common/PrimarySquareButton";
 
 interface FormHeaderProps {
+  update: boolean;
   totalFields: number;
   onPublish: () => void;
   isPublishing?: boolean;
@@ -21,6 +22,7 @@ interface FormHeaderProps {
 }
 
 function FormHeader({
+  update,
   totalFields = 0,
   onPublish,
   isPublishing = false,
@@ -56,19 +58,35 @@ function FormHeader({
               <span>Preview</span>
             </SecondarySquareButton>
 
-            <PrimarySquareButton
-              handleClick={onPublish}
-              disabled={isPublishing || isDrafting}
-              title="Publish Form"
-              className="!font-normal !gap-2  text-xs xs:flex hidden"
-            >
-              {isPublishing ? (
-                <SpinnerIcon size={14} />
-              ) : (
-                <SendIcon size={14} />
-              )}
-              <span>Publish</span>
-            </PrimarySquareButton>
+            {update ? (
+              <PrimarySquareButton
+                handleClick={onPublish}
+                disabled={isPublishing || isDrafting}
+                title="Update Form"
+                className="!font-normal !gap-2  text-xs xs:flex hidden"
+              >
+                {isPublishing ? (
+                  <SpinnerIcon size={14} />
+                ) : (
+                  <SendIcon size={14} />
+                )}
+                <span>Update</span>
+              </PrimarySquareButton>
+            ) : (
+              <PrimarySquareButton
+                handleClick={onPublish}
+                disabled={isPublishing || isDrafting}
+                title="Publish Form"
+                className="!font-normal !gap-2  text-xs xs:flex hidden"
+              >
+                {isPublishing ? (
+                  <SpinnerIcon size={14} />
+                ) : (
+                  <SendIcon size={14} />
+                )}
+                <span>Publish</span>
+              </PrimarySquareButton>
+            )}
 
             <DropDown mainButton={<MoreOptionButton />}>
               <MenuBtn
@@ -94,20 +112,37 @@ function FormHeader({
 
               <div className="xs:hidden block">
                 <Separator />
-                <MenuBtn
-                  handleClick={() => {}}
-                  key={"Publish Form"}
-                  title={"Publish Form"}
-                  disabled={isPublishing || isDrafting}
-                  className="!bg-brand-primary !hover:bg-brand-primary !text-white  data-focus:bg-brand-primary font-semibold "
-                >
-                  {isPublishing ? (
-                    <SpinnerIcon size={14} />
-                  ) : (
-                    <SendIcon size={20} />
-                  )}
-                  <span>Publish Form</span>
-                </MenuBtn>
+                {update ? (
+                  <MenuBtn
+                    handleClick={() => {}}
+                    key={"Update Form"}
+                    title={"Update Form"}
+                    disabled={isPublishing || isDrafting}
+                    className="!bg-brand-primary !hover:bg-brand-primary !text-white  data-focus:bg-brand-primary font-semibold "
+                  >
+                    {isPublishing ? (
+                      <SpinnerIcon size={14} />
+                    ) : (
+                      <SendIcon size={20} />
+                    )}
+                    <span>Update Form</span>
+                  </MenuBtn>
+                ) : (
+                  <MenuBtn
+                    handleClick={() => {}}
+                    key={"Publish Form"}
+                    title={"Publish Form"}
+                    disabled={isPublishing || isDrafting}
+                    className="!bg-brand-primary !hover:bg-brand-primary !text-white  data-focus:bg-brand-primary font-semibold "
+                  >
+                    {isPublishing ? (
+                      <SpinnerIcon size={14} />
+                    ) : (
+                      <SendIcon size={20} />
+                    )}
+                    <span>Publish Form</span>
+                  </MenuBtn>
+                )}
               </div>
             </DropDown>
           </div>

@@ -4,6 +4,21 @@ import connectDB from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { revalidateFormPages } from "@/utils/revalidation";
+import z from "zod";
+import { formFieldsSchema, formSettingSchema } from "@/schema/formSchema";
+
+const BodySchema = z.object({
+  formData: z.object({
+    fields: z
+      .array(formFieldsSchema)
+      .max(50, {
+        message: "Form can't have more than 50 fields",
+      })
+      .min(2, { message: "Your form must have at least 2 fields" }),
+    setting: formSettingSchema,
+  }),
+  status: z.enum(["draft", "published"]),
+});
 
 export async function PUT(
   req: NextRequest,
@@ -11,7 +26,6 @@ export async function PUT(
 ) {
   try {
     await connectDB();
-
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
@@ -30,37 +44,23 @@ export async function PUT(
       return NextResponse.json({ message: "Form not found" }, { status: 404 });
     }
 
-    // Store old status to check if it changed
-    const oldStatus = form.status;
+    const data = BodySchema.parse(body);
+    console.log(data);
 
-    // Update the form
-    const updatedForm = await Form.findOneAndUpdate(
-      { formId, owner: session.user.id },
-      {
-        ...body,
-        updatedAt: new Date(),
-      },
-      { new: true }
-    );
+    form.fields = data.formData.fields;
+    form.title = data.formData.setting.formName;
+    form.description = data.formData.setting.formDescription;
+    form.theme = data.formData.setting.theme;
+    form.status = data.status;
 
-    if (!updatedForm) {
-      return NextResponse.json(
-        { message: "Failed to update form" },
-        { status: 500 }
-      );
-    }
+    await form.save();
 
-    // Revalidate if form was published or status changed
-    if (
-      updatedForm.status === "published" ||
-      oldStatus !== updatedForm.status
-    ) {
-      revalidateFormPages(formId);
-    }
+    revalidateFormPages(formId);
 
     return NextResponse.json({
       message: "Form updated successfully",
-      data: updatedForm,
+      data: form,
+      status: 200,
     });
   } catch (error) {
     console.error("Error updating form:", error);

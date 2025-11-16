@@ -48,6 +48,43 @@ function SubmissionsChart({ userId }: { userId: string }) {
     useGetRecentSubmissionsMutation();
 
   useEffect(() => {
+    const processChartData = (submissions: Submission[]) => {
+      const now = new Date();
+      let dateRange: Date[] = [];
+
+      if (selected.id === 2) {
+        // This Week
+        const weekStart = startOfWeek(now, { weekStartsOn: 0 });
+        dateRange = eachDayOfInterval({ start: weekStart, end: now });
+      } else if (selected.id === 1) {
+        // This Month
+        const monthStart = startOfMonth(now);
+        dateRange = eachDayOfInterval({ start: monthStart, end: now });
+      } else {
+        // All Time - last 30 days
+        dateRange = eachDayOfInterval({ start: subDays(now, 29), end: now });
+      }
+
+      const submissionsByDate = submissions.reduce(
+        (acc: Record<string, number>, sub) => {
+          const date = format(new Date(sub.submittedAt), "yyyy-MM-dd");
+          acc[date] = (acc[date] || 0) + 1;
+          return acc;
+        },
+        {}
+      );
+
+      const formattedData = dateRange.map((date) => ({
+        date: format(
+          date,
+          selected.id === 0 ? "MMM dd" : selected.id === 1 ? "MMM dd" : "EEE"
+        ),
+        submissions: submissionsByDate[format(date, "yyyy-MM-dd")] || 0,
+      }));
+
+      setChartData(formattedData);
+    };
+
     const fetchSubmissions = async () => {
       try {
         const result = await getRecentSubmissions({
@@ -61,46 +98,9 @@ function SubmissionsChart({ userId }: { userId: string }) {
     };
 
     fetchSubmissions();
-    const interval = setInterval(fetchSubmissions, 60000); // Refetch every 60 seconds
+    const interval = setInterval(fetchSubmissions, 60000);
     return () => clearInterval(interval);
   }, [selected, userId, getRecentSubmissions]);
-
-  const processChartData = (submissions: Submission[]) => {
-    const now = new Date();
-    let dateRange: Date[] = [];
-
-    if (selected.id === 2) {
-      // This Week
-      const weekStart = startOfWeek(now, { weekStartsOn: 0 });
-      dateRange = eachDayOfInterval({ start: weekStart, end: now });
-    } else if (selected.id === 1) {
-      // This Month
-      const monthStart = startOfMonth(now);
-      dateRange = eachDayOfInterval({ start: monthStart, end: now });
-    } else {
-      // All Time - last 30 days
-      dateRange = eachDayOfInterval({ start: subDays(now, 29), end: now });
-    }
-
-    const submissionsByDate = submissions.reduce(
-      (acc: Record<string, number>, sub) => {
-        const date = format(new Date(sub.submittedAt), "yyyy-MM-dd");
-        acc[date] = (acc[date] || 0) + 1;
-        return acc;
-      },
-      {}
-    );
-
-    const formattedData = dateRange.map((date) => ({
-      date: format(
-        date,
-        selected.id === 0 ? "MMM dd" : selected.id === 1 ? "MMM dd" : "EEE"
-      ),
-      submissions: submissionsByDate[format(date, "yyyy-MM-dd")] || 0,
-    }));
-
-    setChartData(formattedData);
-  };
 
   return (
     <SimpleCard className="w-full">

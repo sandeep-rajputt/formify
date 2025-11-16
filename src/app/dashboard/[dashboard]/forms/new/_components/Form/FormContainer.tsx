@@ -74,7 +74,20 @@ function FormContainer({ formId }: { formId: FormId }) {
   }, []);
 
   function handlePublish(status: "draft" | "published") {
+    console.log("run");
+
+    // Early validation for field count
+    if (!fields || fields.length < 2) {
+      setPopupType("error");
+      setPopupMessage(
+        "Your form must have at least 2 fields before publishing."
+      );
+      setShowPopup(true);
+      return;
+    }
+
     const data = { fields, setting, id: formId, conversation };
+
     if (status === "draft") {
       setIsDrafting(true);
     } else {
@@ -82,6 +95,7 @@ function FormContainer({ formId }: { formId: FormId }) {
     }
     try {
       FormSchema.parse(data);
+      console.log(data);
       const endpoint =
         formId === "new-form"
           ? "/api/forms/add-new-form"
@@ -93,10 +107,17 @@ function FormContainer({ formId }: { formId: FormId }) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ formData: data, status }),
+        body: JSON.stringify({
+          formData: {
+            fields: data.fields,
+            setting: data.setting,
+          },
+          status,
+        }),
       })
         .then((res) => res.json())
         .then((result) => {
+          console.log(result);
           if (result.id) {
             setNewFormId(result.id);
           }
@@ -127,13 +148,19 @@ function FormContainer({ formId }: { formId: FormId }) {
           setIsDrafting(false);
         });
     } catch (error) {
+      console.log(error);
       if (error instanceof z.ZodError) {
         setPopupType("error");
-        setPopupMessage("Form data is invalid. Please check the fields.");
+        if (error.issues[0].message) {
+          setPopupMessage(error.issues[0].message);
+        } else {
+          setPopupMessage("Form data is invalid. Please check the fields.");
+        }
         setShowPopup(true);
       } else {
         console.error("An unexpected error occurred during validation:", error);
         setPopupType("error");
+        console.log(error);
         setPopupMessage("Something went wrong. Please try again.");
         setShowPopup(true);
       }
@@ -152,6 +179,7 @@ function FormContainer({ formId }: { formId: FormId }) {
         <div>
           <div>
             <FormHeader
+              update={formId === "new-form" ? false : true}
               totalFields={fields.length}
               isPublishing={isPublishing}
               isDrafting={isDrafting}

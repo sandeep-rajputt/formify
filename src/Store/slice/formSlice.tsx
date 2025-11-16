@@ -16,6 +16,7 @@ import type {
   FormId,
   FormFields,
   FormSetting,
+  Form,
 } from "@/types/form-types";
 
 const initialState: Forms = [
@@ -44,6 +45,36 @@ const formSlice = createSlice({
   name: "form",
   initialState,
   reducers: {
+    // createForm
+    createForm(
+      state,
+      action: {
+        payload: {
+          formId: FormId;
+          data: {
+            fields: FormFields[];
+            setting: FormSetting;
+          };
+        };
+      }
+    ) {
+      const form: Form = {
+        id: action.payload.formId,
+        fields: action.payload.data.fields,
+        setting: action.payload.data.setting,
+        conversation: [
+          {
+            role: "model",
+            parts: [
+              {
+                text: `{ "userMessage": "👋 Hello! I’m Tivora. How can I assist you with your current form?"}`,
+              },
+            ],
+          },
+        ],
+      };
+      state.push(form);
+    },
     // reset form
     resetForm(state) {
       const form = state.find((f) => f.id === "new-form");
@@ -414,6 +445,7 @@ export const {
   addFieldAfter,
   addFieldBefore,
   resetForm,
+  createForm,
 } = formSlice.actions;
 
 export default formSlice.reducer;

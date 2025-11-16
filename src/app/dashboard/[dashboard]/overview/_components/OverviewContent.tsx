@@ -4,9 +4,10 @@ import OverviewCards from "./OverviewCards";
 import SubmissionsChart from "./SubmissionsChart";
 import RecentForms from "./RecentForms";
 import TopForms from "./TopForms";
+import { User } from "next-auth";
 
-function OverviewContent({ userId }: { userId: string }) {
-  const { data, isLoading, isError } = useGetDashboardOverviewQuery(userId, {
+function OverviewContent({ user }: { user: User }) {
+  const { data, isLoading, isError } = useGetDashboardOverviewQuery(user.id, {
     pollingInterval: 60000,
   });
 
@@ -45,11 +46,11 @@ function OverviewContent({ userId }: { userId: string }) {
         publishedForms={data.data.publishedForms}
       />
 
-      <SubmissionsChart userId={userId} />
+      <SubmissionsChart userId={user.id} />
 
       <div className="grid gap-6 lg:grid-cols-2 grid-cols-1">
         <RecentForms forms={data.data.recentForms} />
-        <TopForms forms={data.data.formsSubmissions} userId={userId} />
+        <TopForms forms={data.data.formsSubmissions} />
       </div>
     </div>
   );

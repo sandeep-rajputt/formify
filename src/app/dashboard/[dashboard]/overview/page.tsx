@@ -15,7 +15,7 @@ async function Page() {
         </p>
       </div>
 
-      <OverviewContent userId={user.id} />
+      <OverviewContent user={user} />
     </div>
   );
 }
