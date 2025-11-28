@@ -12,7 +12,7 @@ function LoggedinNavLinks({ pathname }: PathnameProps) {
         return (
           <li key={"login-desktop-menu-link" + item}>
             <Link
-              href={item === "Home" ? "" : `${item.toLowerCase()}`}
+              href={item === "Home" ? "/" : `${item.toLowerCase()}`}
               className={`px-3 py-1.5 ${
                 pathname ===
                   `/${item === "Home" ? "" : `${item.toLowerCase()}`}` &&

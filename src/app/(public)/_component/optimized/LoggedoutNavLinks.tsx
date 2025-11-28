@@ -15,7 +15,7 @@ function LoggedoutNavLinks({ pathname }: PathnameProps) {
               href={item === "Home" ? "/" : `/${item.toLowerCase()}`}
               className={`px-3 py-1.5 ${
                 pathname ===
-                  `/${item === "Home" ? "" : `${item.toLowerCase()}`}` &&
+                  `/${item === "Home" ? "/" : `${item.toLowerCase()}`}` &&
                 "text-brand-primary"
               } font-medium`}
             >
