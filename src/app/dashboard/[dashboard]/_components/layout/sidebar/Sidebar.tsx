@@ -1,5 +1,5 @@
 import DashboardSideBarLinks from "@/app/dashboard/[dashboard]/_components/layout/sidebar/DashboardSideBarLinks";
-import DashboardSidebarAccount from "./DashboardSidebarAccount";
+import DashboardSidebarAccountClient from "./DashboardSidebarAccountClient";
 
 function DashboardSidebar() {
   return (
@@ -8,7 +8,7 @@ function DashboardSidebar() {
         <DashboardSideBarLinks />
       </div>
       <div>
-        <DashboardSidebarAccount />
+        <DashboardSidebarAccountClient />
       </div>
     </div>
   );

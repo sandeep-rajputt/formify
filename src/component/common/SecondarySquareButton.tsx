@@ -1,6 +1,6 @@
 "use client";
 import { memo } from "react";
-import type { SecondarySquareButtonProps } from "@/types";
+import type { PrimarySquareButtonProps } from "@/types";
 
 function SecondarySquareButton({
   className = "",
@@ -8,14 +8,14 @@ function SecondarySquareButton({
   title = "",
   disabled = false,
   handleClick = () => {},
-}: SecondarySquareButtonProps) {
+}: PrimarySquareButtonProps) {
   return (
     <button
-      disabled={disabled}
       title={title || (children as string)}
       aria-label={title || (children as string)}
       onClick={handleClick}
-      className={`rounded-md flex items-center justify-center gap-3 px-4 py-2 font-semibold border dark:border-dark-fg/5 border-light-fg/10 dark:bg-dark-fg/5 bg-dark-fg/10 dark:text-dark-fg text-light-fg backdrop-blur-2xl cursor-pointer ${className}`}
+      disabled={disabled}
+      className={`border border-light-fg-muted/20 dark:border-dark-fg-muted/20 flex items-center justify-center gap-3 text-light-fg dark:text-dark-fg px-4 py-2 rounded-md font-semibold cursor-pointer hover:bg-light-surface dark:hover:bg-dark-surface transition-colors ${className}`}
     >
       {children}
     </button>

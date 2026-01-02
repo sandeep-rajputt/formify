@@ -7,6 +7,11 @@ import { User as NextAuthUser, Session } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import generateUniqueId from "@/utils/generateUniqueId";
 
+interface SessionUpdateData {
+  name?: string;
+  image?: string;
+}
+
 export const authOptions = {
   providers: [
     GithubProvider({
@@ -51,7 +56,26 @@ export const authOptions = {
       }
     },
 
-    async jwt({ token, user }: { token: JWT; user?: NextAuthUser }) {
+    async jwt({
+      token,
+      user,
+      trigger,
+      session,
+    }: {
+      token: JWT;
+      user?: NextAuthUser;
+      trigger?: string;
+      session?: SessionUpdateData;
+    }) {
+      // Handle profile updates triggered by update() call
+      if (trigger === "update" && session) {
+        // Update token with new session data
+        if (session.name) token.name = session.name;
+        if (session.image) token.image = session.image;
+        return token;
+      }
+
+      // Handle initial sign in - fetch user data from database
       if (user) {
         await connectDB();
         const dbUser = await User.findOne({ email: user.email });
@@ -64,6 +88,7 @@ export const authOptions = {
           token.image = dbUser.image;
         }
       }
+
       return token;
     },
 
