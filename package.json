@@ -19,7 +19,7 @@
     "date-fns": "^4.1.0",
     "json5": "^2.2.3",
     "mongoose": "^8.18.1",
-    "next": "15.5.2",
+    "next": "15.5.9",
     "next-auth": "^4.24.11",
     "nextjs-toploader": "^3.9.17",
     "react": "19.1.0",
