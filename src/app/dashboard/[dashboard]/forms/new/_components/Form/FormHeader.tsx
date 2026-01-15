@@ -3,11 +3,8 @@ import DropDown from "@/component/headlessui/DropDown";
 import SendIcon from "@/component/svg/SendIcon";
 import EditIcon from "@/component/svg/EditIcon";
 import MenuBtn from "@/component/headlessui/MenuBtn";
-import Separator from "@/component/headlessui/Separator";
 import SpinnerIcon from "@/component/svg/SpinnerIcon";
 import DraftDocumentIcon from "@/component/svg/DraftDocumentIcon";
-import SecondarySquareButton from "@/component/common/SecondarySquareButton";
-import PreviewIcon from "@/component/svg/PreviewIcon";
 import PrimarySquareButton from "@/component/common/PrimarySquareButton";
 
 interface FormHeaderProps {
@@ -18,7 +15,6 @@ interface FormHeaderProps {
   onDraft: () => void;
   isDrafting?: boolean;
   onEdit: () => void;
-  onPreview?: () => void;
 }
 
 function FormHeader({
@@ -27,8 +23,8 @@ function FormHeader({
   onPublish,
   isPublishing = false,
   onEdit,
+  onDraft,
   isDrafting = false,
-  onPreview,
 }: FormHeaderProps) {
   return (
     <div className="bg-light-surface dark:bg-dark-surface">
@@ -47,23 +43,12 @@ function FormHeader({
 
           {/* Right Section - Actions */}
           <div className="flex  space-x-3">
-            {/* Preview Button */}
-            <SecondarySquareButton
-              disabled={isDrafting || isPublishing}
-              title="Preview"
-              handleClick={onPreview}
-              className="!font-normal !gap-2 px-2 py-1 text-xs"
-            >
-              <PreviewIcon />
-              <span>Preview</span>
-            </SecondarySquareButton>
-
             {update ? (
               <PrimarySquareButton
                 handleClick={onPublish}
                 disabled={isPublishing || isDrafting}
                 title="Update Form"
-                className="!font-normal !gap-2  text-xs xs:flex hidden"
+                className="!font-normal !gap-2  text-xs flex"
               >
                 {isPublishing ? (
                   <SpinnerIcon size={14} />
@@ -77,7 +62,7 @@ function FormHeader({
                 handleClick={onPublish}
                 disabled={isPublishing || isDrafting}
                 title="Publish Form"
-                className="!font-normal !gap-2  text-xs xs:flex hidden"
+                className="!font-normal !gap-2  text-xs flex"
               >
                 {isPublishing ? (
                   <SpinnerIcon size={14} />
@@ -93,13 +78,12 @@ function FormHeader({
                 handleClick={onEdit}
                 key={"Edit Form"}
                 title={"Edit Form"}
-                className=""
               >
                 <EditIcon size={16} />
                 <span>Edit Form</span>
               </MenuBtn>
               <MenuBtn
-                handleClick={() => {}}
+                handleClick={onDraft}
                 key={"Draft Form"}
                 title={"Draft Form"}
                 className=""
@@ -109,41 +93,6 @@ function FormHeader({
 
                 <span>Draft</span>
               </MenuBtn>
-
-              <div className="xs:hidden block">
-                <Separator />
-                {update ? (
-                  <MenuBtn
-                    handleClick={() => {}}
-                    key={"Update Form"}
-                    title={"Update Form"}
-                    disabled={isPublishing || isDrafting}
-                    className="!bg-brand-primary !hover:bg-brand-primary !text-white  data-focus:bg-brand-primary font-semibold "
-                  >
-                    {isPublishing ? (
-                      <SpinnerIcon size={14} />
-                    ) : (
-                      <SendIcon size={20} />
-                    )}
-                    <span>Update Form</span>
-                  </MenuBtn>
-                ) : (
-                  <MenuBtn
-                    handleClick={() => {}}
-                    key={"Publish Form"}
-                    title={"Publish Form"}
-                    disabled={isPublishing || isDrafting}
-                    className="!bg-brand-primary !hover:bg-brand-primary !text-white  data-focus:bg-brand-primary font-semibold "
-                  >
-                    {isPublishing ? (
-                      <SpinnerIcon size={14} />
-                    ) : (
-                      <SendIcon size={20} />
-                    )}
-                    <span>Publish Form</span>
-                  </MenuBtn>
-                )}
-              </div>
             </DropDown>
           </div>
         </div>

@@ -24,6 +24,7 @@ import { HeadingField } from "@/app/dashboard/[dashboard]/forms/new/_components/
 import { ParagraphField } from "@/app/dashboard/[dashboard]/forms/new/_components/Form/Fields/ParagraphField";
 import { DividerField } from "@/app/dashboard/[dashboard]/forms/new/_components/Form/Fields/DividerField";
 import { ListField } from "@/app/dashboard/[dashboard]/forms/new/_components/Form/Fields/ListField";
+import ConfirmationModal from "@/component/common/ConfirmationModal";
 import z from "zod";
 
 function FormContainer({ formId }: { formId: FormId }) {
@@ -53,6 +54,9 @@ function FormContainer({ formId }: { formId: FormId }) {
   const [popupMessage, setPopupMessage] = useState<string>("");
   const [newFormId, setNewFormId] = useState<string>("");
   const [copySuccess, setCopySuccess] = useState<boolean>(false);
+  const [confirmPublishModel, setConfirmPublishModel] = useState<
+    null | "Publish" | "Update" | "Draft"
+  >(null);
 
   // Copy link function
   const copyFormLink = async () => {
@@ -73,15 +77,16 @@ function FormContainer({ formId }: { formId: FormId }) {
     }
   }, []);
 
-  function handlePublish(status: "draft" | "published") {
-    console.log("run");
-
-    // Early validation for field count
+  function handlePublish(status: "draft" | "publish" | "update") {
     if (!fields || fields.length < 2) {
+      setConfirmPublishModel(null);
       setPopupType("error");
       setPopupMessage(
         "Your form must have at least 2 fields before publishing."
       );
+
+      setIsPublishing(false);
+      setIsDrafting(false);
       setShowPopup(true);
       return;
     }
@@ -112,7 +117,7 @@ function FormContainer({ formId }: { formId: FormId }) {
             fields: data.fields,
             setting: data.setting,
           },
-          status,
+          status: status === "draft" ? "draft" : "published",
         }),
       })
         .then((res) => res.json())
@@ -124,14 +129,17 @@ function FormContainer({ formId }: { formId: FormId }) {
           if (result.status === 200) {
             setPopupType("success");
             setPopupMessage(
-              status === "published"
+              status === "publish"
                 ? "Form published successfully! 🎉"
-                : "Form saved as draft! 📝"
+                : status === "draft"
+                ? "Form saved as draft! 📝"
+                : "Form updated successfully! 🎉"
             );
           } else {
             setPopupType("error");
             setPopupMessage("Something went wrong. Please try again.");
           }
+
           setShowPopup(true);
           if (formId === "new-form") {
             dispatch(resetForm());
@@ -144,6 +152,7 @@ function FormContainer({ formId }: { formId: FormId }) {
           setShowPopup(true);
         })
         .finally(() => {
+          setConfirmPublishModel(null);
           setIsPublishing(false);
           setIsDrafting(false);
         });
@@ -164,6 +173,7 @@ function FormContainer({ formId }: { formId: FormId }) {
         setPopupMessage("Something went wrong. Please try again.");
         setShowPopup(true);
       }
+      setConfirmPublishModel(null);
       setIsPublishing(false);
       setIsDrafting(false);
     }
@@ -185,14 +195,15 @@ function FormContainer({ formId }: { formId: FormId }) {
               isDrafting={isDrafting}
               onPublish={() => {
                 setIsPublishing(true);
-                handlePublish("published");
+                setConfirmPublishModel(
+                  formId === "new-form" ? "Publish" : "Update"
+                );
               }}
               onDraft={() => {
                 setIsDrafting(true);
-                handlePublish("draft");
+                setConfirmPublishModel("Draft");
               }}
               onEdit={() => setShowFormSetting(true)}
-              onPreview={() => {}}
             />
           </div>
           <Separator className="!my-0" />
@@ -794,6 +805,25 @@ function FormContainer({ formId }: { formId: FormId }) {
                 </button>
               </div>
             </div>
+          </NewPortal>
+        )}
+        {confirmPublishModel && (
+          <NewPortal>
+            <ConfirmationModal
+              heading={`${confirmPublishModel} Confirmation`}
+              handleCancel={() => setConfirmPublishModel(null)}
+              handleConfirm={() =>
+                handlePublish(
+                  confirmPublishModel.toLocaleLowerCase() as
+                    | "draft"
+                    | "publish"
+                    | "update"
+                )
+              }
+            >
+              Are you sure you want to {confirmPublishModel.toLocaleLowerCase()}{" "}
+              this form?
+            </ConfirmationModal>
           </NewPortal>
         )}
       </div>
