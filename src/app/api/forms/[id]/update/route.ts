@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Form } from "@/models/Form.model";
+import { Submission } from "@/models/Submission.model";
 import connectDB from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
@@ -45,7 +46,6 @@ export async function PUT(
     }
 
     const data = BodySchema.parse(body);
-    console.log(data);
 
     form.fields = data.formData.fields;
     form.title = data.formData.setting.formName;
@@ -54,6 +54,9 @@ export async function PUT(
     form.status = data.status;
 
     await form.save();
+
+    // Delete all submissions for this form
+    await Submission.deleteMany({ formId });
 
     revalidateFormPages(formId);
 

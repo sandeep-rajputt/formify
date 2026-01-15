@@ -821,8 +821,14 @@ function FormContainer({ formId }: { formId: FormId }) {
                 )
               }
             >
-              Are you sure you want to {confirmPublishModel.toLocaleLowerCase()}{" "}
+              Are you sure you want to {confirmPublishModel.toLocaleLowerCase()}
               this form?
+              {formId !== "new-form" && (
+                <p className="text-red-500">
+                  Remember that if you update this form, all its old submissions
+                  will be deleted
+                </p>
+              )}
             </ConfirmationModal>
           </NewPortal>
         )}
