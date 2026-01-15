@@ -6,7 +6,6 @@ import OverviewSVG from "@/component/svg/OverviewSVG";
 import SubmissionsSVG from "@/component/svg/SubmissionsSVG";
 import SettingSVG from "@/component/svg/SettingSVG";
 import FormsSVG from "@/component/svg/FormsSVG";
-import TemplatesSVG from "@/component/svg/TemplatesSVG";
 import { useIsLargeScreen } from "@/app/dashboard/[dashboard]/_hooks/useIsLargeScreen";
 import { useAppDispatch } from "@/hooks/reduxToolkit";
 import { closeSidebar } from "@/Store/slice/dashboardSidebarSlice";
@@ -53,7 +52,6 @@ function DashboardSidebarLink({ item }: { item: Item }): ReactNode {
           >
             {item.logo === "overview" && <OverviewSVG size={20} />}
             {item.logo === "forms" && <FormsSVG size={20} />}
-            {item.logo === "templates" && <TemplatesSVG size={20} />}
             {item.logo === "submissions" && <SubmissionsSVG size={20} />}
             {item.logo === "setting" && <SettingSVG size={20} />}
 

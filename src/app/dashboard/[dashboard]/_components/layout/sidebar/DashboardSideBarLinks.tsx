@@ -24,12 +24,6 @@ async function DashboardSideBarLinks() {
       logo: "forms",
     },
     {
-      name: "Templates",
-      link: `/dashboard/${user?.dashboard}/templates`,
-      logo: "templates",
-    },
-
-    {
       name: "Submissions",
       link: `/dashboard/${user?.dashboard}/submissions`,
       logo: "submissions",
