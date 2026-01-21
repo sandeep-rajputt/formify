@@ -8,7 +8,7 @@ import updateIdInResponse from "@/utils/updateIdInResponse";
 
 async function runGemini(
   chats: Chats,
-  data: { fields: FormFields[]; setting: FormSetting }
+  data: { fields: FormFields[]; setting: FormSetting },
 ) {
   "use server";
 
@@ -46,7 +46,7 @@ IMPORTANT: Respond **only with valid JSON**, using double quotes for all keys an
     ],
   };
 
-  const model = "gemini-2.5-pro";
+  const model = "gemini-2.5-flash-lite";
   let finalResponse = "";
 
   try {
