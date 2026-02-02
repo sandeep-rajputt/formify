@@ -13,9 +13,8 @@ function FormsContent({ userId, user }: { userId: string; user: User }) {
 
   const { data, isLoading, isError } = useGetFormsQuery(
     { userId, search, status, sortBy, order },
-    { pollingInterval: 60000 }
+    { pollingInterval: 60000 },
   );
-
   return (
     <div className="space-y-6">
       <FormsFilters

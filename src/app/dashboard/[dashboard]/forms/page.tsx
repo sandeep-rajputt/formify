@@ -18,7 +18,7 @@ async function FormsPage() {
           </p>
         </div>
         <Link
-          href={`/dashboard/${user.id}/forms/new`}
+          href={`/dashboard/${user.dashboard}/forms/new`}
           className="flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-primary/90 transition-colors"
         >
           <FiPlus size={20} />
@@ -26,7 +26,7 @@ async function FormsPage() {
         </Link>
       </div>
 
-      <FormsContent userId={user.id} user={user} />
+      <FormsContent userId={user.dashboard} user={user} />
     </div>
   );
 }

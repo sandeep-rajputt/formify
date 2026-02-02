@@ -27,7 +27,7 @@ type FormItem = {
 };
 
 type FormsParams = {
-  userId: string;
+  userId: string; // This will be the dashboard ID
   search?: string;
   status?: string;
   sortBy?: string;
@@ -64,7 +64,7 @@ export const dashboardApi = baseApi.injectEndpoints({
           return `/dashboard/${userId}/forms?${params.toString()}`;
         },
         providesTags: ["Dashboard"],
-      }
+      },
     ),
     toggleFormVisibility: builder.mutation<
       { message: string; status: number },
